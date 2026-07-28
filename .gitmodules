@@ -1,0 +1,3 @@
+[submodule "Submodule/ServerCore"]
+	path = Submodule/ServerCore
+	url = https://github.com/chibi1541/iocp-server-core.git
