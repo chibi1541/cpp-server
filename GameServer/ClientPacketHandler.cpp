@@ -25,42 +25,6 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 	Protocol::S_LOGIN loginPkt;
 	loginPkt.set_success(true);
 
-	// DB에서 플레이 정보를 긁어온다
-	// GameSession에 플레이어 정보를 저장 (메모리)
-	// 일반적으로 계정관련 클래스를 만들어서 DB데이터를 저장하는 방식
-
-	// ID 발급 (DB 아이디가 아니고, 인게임 아이디)
-	// 인게임 용 인스턴스 아이디가 따로 있는 건가?
-	static Atomic<uint64> idGenerator = 1;
-
-	{
-		auto player = loginPkt.add_players();
-		player->set_name(u8"DB에서긁어온이름1");
-		player->set_playertype(Protocol::PLAYER_TYPE_WARRIOR);
-
-		PlayerRef playerRef = MakeShared<Player>();
-		playerRef->playerId = idGenerator++;
-		playerRef->name = player->name();
-		playerRef->type = player->playertype();
-		playerRef->ownerSession = gameSession;
-
-		gameSession->_players.push_back(playerRef);
-	}
-
-	{
-		auto player = loginPkt.add_players();
-		player->set_name(u8"DB에서긁어온이름2");
-		player->set_playertype(Protocol::PLAYER_TYPE_MAGE);
-
-		PlayerRef playerRef = MakeShared<Player>();
-		playerRef->playerId = idGenerator++;
-		playerRef->name = player->name();
-		playerRef->type = player->playertype();
-		playerRef->ownerSession = gameSession;
-
-		gameSession->_players.push_back(playerRef);
-	}
-
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(loginPkt);
 	session->Send(sendBuffer);
 

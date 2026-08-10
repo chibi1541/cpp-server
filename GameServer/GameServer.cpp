@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ThreadManager.h"
 #include "SocketUtils.h"
 #include "Listener.h"
@@ -24,14 +24,14 @@ void DoWokerJob(ServerServiceRef& service)
 {
 	while(true)
 	{
-		// ÀÌ°Å dispatch ¹ØÀ¸·Î ³»·Áµµ µÉ·Á³ª?
-		// ¾Æ ³»¸®¸é ÀÏ°¨ ¸ô·ÈÀ» ¶§ ¾²·¹µå°¡ ³ë¿¹ »óÅÂ°¡ µÇ´Â °Ç ¸ø ¸·´Â ±¸³ª 
+		// ì´ê±° dispatch ë°‘ìœ¼ë¡œ ë‚´ë ¤ë„ ë ë ¤ë‚˜?
+		// ì•„ ë‚´ë¦¬ë©´ ì¼ê° ëª°ë ¸ì„ ë•Œ ì“°ë ˆë“œê°€ ë…¸ì˜ˆ ìƒíƒœê°€ ë˜ëŠ” ê±´ ëª» ë§‰ëŠ” êµ¬ë‚˜ 
 		LEndTickCount = ::GetTickCount64() + WORKER_TICK;
 
-		// ³×Æ®¿öÅ© ÀÔÃâ·Â Ã³¸® -> ÀÎ°ÔÀÓ ·ÎÁ÷±îÁö (ÆĞÅ¶ ÇÚµé·¯¿¡ ÀÇÇØ)
+		// ë„¤íŠ¸ì›Œí¬ ì…ì¶œë ¥ ì²˜ë¦¬ -> ì¸ê²Œì„ ë¡œì§ê¹Œì§€ (íŒ¨í‚· í•¸ë“¤ëŸ¬ì— ì˜í•´)
 		service->GetIocpCore()->Dispatch(10);
 
-		// ±Û·Î¹ú Å¥
+		// ê¸€ë¡œë²Œ í
 		ThreadManager::DoGlobalQueueWork();
 
 		ThreadManager::DistributeReservedJobs();
@@ -41,48 +41,6 @@ void DoWokerJob(ServerServiceRef& service)
 
 int main()
 {
-	// Å×½ºÆ® ¿ëÀ¸·Î 1°³¸¸ »ı¼º
-	// ODBC <-> MSSQL Connection string(Trusted Connection) Çü½Ä
-	// Driver={ODBC Driver 17 for SQL Server};Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;
-	ASSERT_CRASH(GDBConnectionPool->Connect(1, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDB;Trusted_Connection=Yes;"));
-
-	DBConnection* dbConn = GDBConnectionPool->Pop();
-	DBSynchronizer dbSync(*dbConn);
-	dbSync.Synchronize(L"GameDB.xml");
-
-	{
-		WCHAR name[] = L"Rookiss";
-
-		SP::InsertGold insertGold(*dbConn);
-		insertGold.In_Gold(100);
-		insertGold.In_Name(name);
-		insertGold.In_CreateDate(TIMESTAMP_STRUCT{ 2020, 6, 8 });
-		insertGold.Execute();
-	}
-
-	{
-		SP::GetGold getGold(*dbConn);
-		getGold.In_Gold(100);
-
-		int32 id = 0;
-		int32 gold = 0;
-		WCHAR name[100];
-		TIMESTAMP_STRUCT date;
-
-		getGold.Out_Id(OUT id);
-		getGold.Out_Gold(OUT gold);
-		getGold.Out_Name(OUT name);
-		getGold.Out_CreateDate(OUT date);
-
-		getGold.Execute();
-
-		while (getGold.Fetch())
-		{
-			GConsoleLogger->WriteStdOut(Color::BLUE,
-				L"ID[%d] Gold[%d] Name[%s]\n", id, gold, name);
-		}
-	};
-
 	ClientPacketHandler::Init();
 
 	ServerServiceRef service = MakeShared<ServerService>(
