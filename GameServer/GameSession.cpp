@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameSession.h"
 #include "GameSessionManager.h"
 #include "ClientPacketHandler.h"
@@ -22,7 +22,6 @@ void GameSession::OnDisconnected()
 	}
 
 	_currentPlayer = nullptr;
-	_players.clear();
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)

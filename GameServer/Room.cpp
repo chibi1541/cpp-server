@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Room.h"
 #include "Player.h"
 #include "GameSession.h"
@@ -21,4 +21,19 @@ void Room::Broadcast(SendBufferRef sendBuffer)
 	{
 		p.second->ownerSession->Send(sendBuffer);
 	}
+}
+
+vector<PlayerRef> Room::GetPlayersLocked()
+{
+	WRITE_LOCK;
+
+	vector<PlayerRef> ret;
+	ret.reserve(_players.size());
+
+	for (auto p : _players)
+	{
+		ret.push_back(p.second);
+	}
+
+	return ret;
 }

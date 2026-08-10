@@ -1,4 +1,4 @@
-// .proto 버전
+﻿// .proto 버전
 syntax = "proto3";
 
 // package name
@@ -6,10 +6,21 @@ package Protocol;
 
 import "Enum.proto";
 
-message Player
+message User
 {
 	uint64 id = 1;
 	string name = 2;
-	PlayerType playerType = 3;
-	// 기타 스탯 정보...
+}
+
+message Vector2
+{
+	int32 x = 1;
+	int32 y = 2;
+}
+
+message PlayerInfo
+{
+	uint64 id = 1;
+	string name = 2;
+	Vector2 pos = 3;
 }

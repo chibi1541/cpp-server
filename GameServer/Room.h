@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "JobQueue.h"
 
 class Room : public JobQueue
@@ -8,7 +8,11 @@ public:
 	void Leave(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
 
+	vector<PlayerRef> GetPlayersLocked();
+
 private:
+	USE_LOCK;
+
 	map<uint64, PlayerRef> _players;
 
 };

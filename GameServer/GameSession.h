@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Session.h"
 
 class GameSession : public PacketSession
@@ -16,7 +16,7 @@ public:
 	virtual void OnSend(int32 len) override;
 
 public:
-	Vector<PlayerRef> _players;
+	PlayerRef _player;
 
 	PlayerRef _currentPlayer;
 	weak_ptr<class Room> _room;
