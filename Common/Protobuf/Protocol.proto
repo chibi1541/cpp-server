@@ -24,17 +24,21 @@ message C_ENTER_GAME
 message S_ENTER_GAME
 {
 	bool success = 1;
-	Vector2 spawnPos = 2;
-	repeated PlayerInfo players = 3;
-}
-
-message C_SPAWN_ACTOR
-{
-
+	PlayerInfo player = 2;
 }
 
 message S_SPAWN_ACTOR
 {
 	uint64 id = 1;
 	Vector2 spawnPos = 2;
+}
+
+message C_MOVE_ACTOR
+{
+	DirectionType newdir = 1; 
+}
+
+message S_UPDATE_ROOM
+{
+	repeated ActorInfo actors = 1;
 }

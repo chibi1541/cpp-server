@@ -7,6 +7,8 @@
 #include "Room.h"
 #include "GameSession.h"
 #include <random>
+#include "SnakeHead.h"
+#include "ObjectIdHandler.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -36,7 +38,7 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 		playerRef->playerId = idGenerator++;
 		playerRef->ownerSession = gameSession;
 
-		gameSession->_currentPlayer = playerRef;
+		gameSession->_player = playerRef;
 
 	}
 
@@ -63,37 +65,31 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	std::uniform_int_distribution<int> disty(0, 20);
 	int y = disty(gen);
 
-	gameSession->_currentPlayer.get()->xPos = x;
-	gameSession->_currentPlayer.get()->yPos = y;
+	SnakeHeadRef snakeActor = MakeShared<SnakeHead>(
+		ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_HEAD), x, y, gameSession->_player);
+	gameSession->_player->headActor = snakeActor;
 
-	GRoom->DoAsync(&Room::Enter, gameSession->_currentPlayer);
+	GRoom->DoAsync(&Room::Enter, gameSession->_player);
 
 	{
 		Protocol::S_ENTER_GAME enterGamePkt;
 		enterGamePkt.set_success(true);
-		Protocol::Vector2* spawnPos = enterGamePkt.mutable_spawnpos();
-		spawnPos->set_x(x);
-		spawnPos->set_y(y);
-		vector<PlayerRef> players = GRoom->GetPlayersLocked();
-		for (const PlayerRef& player : players)
-		{
-			Protocol::PlayerInfo* info = enterGamePkt.add_players();
-			if (info->id() == gameSession->_currentPlayer.get()->playerId)
-				continue;
-
-			info->set_id(player.get()->playerId);
-			Protocol::Vector2* spawnPos = enterGamePkt.mutable_spawnpos();
-			spawnPos->set_x(player.get()->xPos);
-			spawnPos->set_y(player.get()->yPos);
-		}
+		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
+		playerInfo->set_id(gameSession->_player->playerId);
+		Protocol::ActorInfo* actorInfo = new Protocol::ActorInfo();
+		actorInfo->set_objectid(gameSession->_player->headActor->GetObjectId());
+		Protocol::Vector2* pos = new Protocol::Vector2(gameSession->_player->headActor->GetPosition());
+		actorInfo->set_allocated_pos(pos);
+		playerInfo->set_allocated_actor(actorInfo);
+		enterGamePkt.set_allocated_player(playerInfo);
 
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
-		gameSession->_currentPlayer->ownerSession->Send(sendBuffer);
+		gameSession->_player->ownerSession->Send(sendBuffer);
 	}
 
 	{
 		Protocol::S_SPAWN_ACTOR spawnPkt;
-		spawnPkt.set_id(gameSession->_currentPlayer.get()->playerId);
+		spawnPkt.set_id(gameSession->_player.get()->headActor->GetObjectId());
 		Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
 		spawnPos->set_x(x);
 		spawnPos->set_y(y);
@@ -105,9 +101,13 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	return true;
 }
 
-bool Handle_C_SPAWN_ACTOR(PacketSessionRef& session, Protocol::C_SPAWN_ACTOR& pkt)
+bool Handle_C_MOVE_ACTOR(PacketSessionRef& session, Protocol::C_MOVE_ACTOR& pkt)
 {
+	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
+	shared_ptr<Room> room = gameSession->_room.lock();
+
+	room->DoAsync(&Room::SetDirection, gameSession->_player->headActor->GetObjectId(), pkt.newdir());
 
 	return true;
 }

@@ -48,6 +48,15 @@
     <ClCompile Include="Room.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>GameContents</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakeHead.cpp">
+      <Filter>GameContents</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectIdHandler.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -79,6 +88,15 @@
     </ClInclude>
     <ClInclude Include="GenProcedures.h">
       <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="SnakeHead.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectIdHandler.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

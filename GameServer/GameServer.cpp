@@ -51,7 +51,9 @@ int main()
 
 	ASSERT_CRASH(service->Start());
 
-	for (int32 i = 0; i < 5; i++)
+	GRoom->DoTimer(200, &Room::Tick, 0.2f);
+
+	for (int32 i = 0; i < 8; i++)
 	{
 		GThreadManager->Launch([&service]()
 			{

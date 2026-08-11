@@ -1,8 +1,27 @@
-// .proto 버전
+﻿// .proto 버전
 syntax = "proto3";
 
 // package name
 package Protocol;
+
+enum ObjectType
+{
+	OBJECT_NONE = 0;
+	OBJECT_ACTOR = 1;
+	OBJECT_SNAKE_HEAD = 2;
+	OBJECT_SNAKE_BODY = 3;
+	OBJECT_ITEM = 4;
+	OBJECT_WALL = 5;
+}
+
+enum DirectionType
+{
+	DIR_NONE = 0;
+	DIR_LEFT = 1;
+	DIR_RIGHT = 2;
+	DIR_UP = 3;
+	DIR_DOWN = 4;
+}
 
 enum PlayerType
 {
@@ -13,3 +32,4 @@ enum PlayerType
 	PLAYER_TYPE_ARCHER = 3;
 	PLAYER_TYPE_WARRIOR = 4;
 }
+

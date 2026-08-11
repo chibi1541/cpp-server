@@ -47,6 +47,63 @@ PROTOBUF_NAMESPACE_OPEN
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
+enum ObjectType : int {
+  OBJECT_NONE = 0,
+  OBJECT_ACTOR = 1,
+  OBJECT_SNAKE_HEAD = 2,
+  OBJECT_SNAKE_BODY = 3,
+  OBJECT_ITEM = 4,
+  OBJECT_WALL = 5,
+  ObjectType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ObjectType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ObjectType_IsValid(int value);
+constexpr ObjectType ObjectType_MIN = OBJECT_NONE;
+constexpr ObjectType ObjectType_MAX = OBJECT_WALL;
+constexpr int ObjectType_ARRAYSIZE = ObjectType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ObjectType_descriptor();
+template<typename T>
+inline const std::string& ObjectType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ObjectType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ObjectType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ObjectType_descriptor(), enum_t_value);
+}
+inline bool ObjectType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ObjectType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ObjectType>(
+    ObjectType_descriptor(), name, value);
+}
+enum DirectionType : int {
+  DIR_NONE = 0,
+  DIR_LEFT = 1,
+  DIR_RIGHT = 2,
+  DIR_UP = 3,
+  DIR_DOWN = 4,
+  DirectionType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  DirectionType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool DirectionType_IsValid(int value);
+constexpr DirectionType DirectionType_MIN = DIR_NONE;
+constexpr DirectionType DirectionType_MAX = DIR_DOWN;
+constexpr int DirectionType_ARRAYSIZE = DirectionType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DirectionType_descriptor();
+template<typename T>
+inline const std::string& DirectionType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, DirectionType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function DirectionType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    DirectionType_descriptor(), enum_t_value);
+}
+inline bool DirectionType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, DirectionType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<DirectionType>(
+    DirectionType_descriptor(), name, value);
+}
 enum PlayerType : int {
   PLAYER_TYPE_NONE = 0,
   PLAYER_TYPE_KNIGHT = 1,
@@ -97,6 +154,16 @@ inline bool PlayerType_Parse(
 
 PROTOBUF_NAMESPACE_OPEN
 
+template <> struct is_proto_enum< ::Protocol::ObjectType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::ObjectType>() {
+  return ::Protocol::ObjectType_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::DirectionType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::DirectionType>() {
+  return ::Protocol::DirectionType_descriptor();
+}
 template <> struct is_proto_enum< ::Protocol::PlayerType> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::PlayerType>() {

@@ -13,15 +13,15 @@ void GameSession::OnDisconnected()
 {
 	GSessionManager.Remove(static_pointer_cast<GameSession>(shared_from_this()));
 
-	if(_currentPlayer)
+	if(_player)
 	{
 		if(auto room = _room.lock())
 		{
-			room->DoAsync(&Room::Leave, _currentPlayer);
+			room->DoAsync(&Room::Leave, _player);
 		}
 	}
 
-	_currentPlayer = nullptr;
+	_player = nullptr;
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)

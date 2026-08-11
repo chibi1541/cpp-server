@@ -22,22 +22,27 @@ namespace _pbi = _pb::internal;
 
 namespace Protocol {
 }  // namespace Protocol
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[1];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[3];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Enum_2eproto = nullptr;
 const uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
 static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
 static constexpr ::_pb::Message* const* file_default_instances = nullptr;
 
 const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\nEnum.proto\022\010Protocol*\201\001\n\nPlayerType\022\024\n"
-  "\020PLAYER_TYPE_NONE\020\000\022\026\n\022PLAYER_TYPE_KNIGH"
-  "T\020\001\022\024\n\020PLAYER_TYPE_MAGE\020\002\022\026\n\022PLAYER_TYPE"
-  "_ARCHER\020\003\022\027\n\023PLAYER_TYPE_WARRIOR\020\004b\006prot"
-  "o3"
+  "\n\nEnum.proto\022\010Protocol*\177\n\nObjectType\022\017\n\013"
+  "OBJECT_NONE\020\000\022\020\n\014OBJECT_ACTOR\020\001\022\025\n\021OBJEC"
+  "T_SNAKE_HEAD\020\002\022\025\n\021OBJECT_SNAKE_BODY\020\003\022\017\n"
+  "\013OBJECT_ITEM\020\004\022\017\n\013OBJECT_WALL\020\005*T\n\rDirec"
+  "tionType\022\014\n\010DIR_NONE\020\000\022\014\n\010DIR_LEFT\020\001\022\r\n\t"
+  "DIR_RIGHT\020\002\022\n\n\006DIR_UP\020\003\022\014\n\010DIR_DOWN\020\004*\201\001"
+  "\n\nPlayerType\022\024\n\020PLAYER_TYPE_NONE\020\000\022\026\n\022PL"
+  "AYER_TYPE_KNIGHT\020\001\022\024\n\020PLAYER_TYPE_MAGE\020\002"
+  "\022\026\n\022PLAYER_TYPE_ARCHER\020\003\022\027\n\023PLAYER_TYPE_"
+  "WARRIOR\020\004b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 162, descriptor_table_protodef_Enum_2eproto,
+    false, false, 377, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -51,9 +56,44 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_Enum_2ep
 // Force running AddDescriptors() at dynamic initialization time.
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_Enum_2eproto(&descriptor_table_Enum_2eproto);
 namespace Protocol {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerType_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ObjectType_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
   return file_level_enum_descriptors_Enum_2eproto[0];
+}
+bool ObjectType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DirectionType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[1];
+}
+bool DirectionType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[2];
 }
 bool PlayerType_IsValid(int value) {
   switch (value) {

@@ -18,9 +18,15 @@ message Vector2
 	int32 y = 2;
 }
 
+message ActorInfo
+{
+	uint64 objectId = 1;
+	Vector2 pos = 2;
+}
+
 message PlayerInfo
 {
 	uint64 id = 1;
 	string name = 2;
-	Vector2 pos = 3;
+	ActorInfo actor = 3;
 }

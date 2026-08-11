@@ -17,8 +17,6 @@ public:
 
 public:
 	PlayerRef _player;
-
-	PlayerRef _currentPlayer;
 	weak_ptr<class Room> _room;
 };
 
