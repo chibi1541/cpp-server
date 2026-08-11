@@ -43,7 +43,6 @@ build/
 Build/
 build-*/
 Intermediate/
-Libraries/
 
 # CMake generated files
 CMakeFiles/
