@@ -5,6 +5,8 @@
 class Room : public JobQueue
 {
 public:
+	Room();
+
 	void Enter(PlayerRef player);
 	void Leave(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
@@ -37,6 +39,8 @@ private:
 	float _elapsedTime = 0.f;
 
 	uint64 _prevElapsedTime = 0;
+
+	unique_ptr<class CollisionSystem> collisionSys;
 };
 
 extern shared_ptr<Room> GRoom;

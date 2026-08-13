@@ -5,9 +5,15 @@
 #include "ClientPacketHandler.h"
 #include "ObjectIdHandler.h"
 #include "Item.h"
-#include <random>
+#include "CollisionSystem.h"
 
 shared_ptr<Room> GRoom = make_shared<Room>();
+
+Room::Room()
+{
+	// TODO : 룸 세분화 시에 별도의 초기화 로직 준비
+	collisionSys = make_unique<CollisionSystem>();
+}
 
 void Room::Enter(PlayerRef player)
 {
@@ -94,13 +100,8 @@ void Room::Tick(float deltaTime)
 		_elapsedTime += fElapsedTime;
 		if (_spawnDelta <= _elapsedTime)
 		{
-			static std::random_device rd;
-			static std::mt19937 gen(rd());
-			std::uniform_int_distribution<int32> distx(0, 80);
-			int32 x = distx(gen);
-
-			std::uniform_int_distribution<int32> disty(0, 20);
-			int32 y = disty(gen);
+			int32 x = RandomRange32(0, 80);
+			int32 y = RandomRange32(0, 20);
 
 			_elapsedTime = 0.f;
 			ActorRef item = ObjectPool<Item>::MakeShared(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_ITEM), x * 100, y * 100, 1);
@@ -123,7 +124,7 @@ void Room::Tick(float deltaTime)
 		actor->Tick(fElapsedTime);
 	}
 
-	CheckCollision();
+	collisionSys->ProcessCollision(_actors);
 
 	Protocol::S_UPDATE_ROOM updatePkt;
 

@@ -17,8 +17,14 @@ public:
 	uint64 GetObjectId() const { return objectId; }
 	void SetObjectId(uint64 objectId);
 
+	virtual void MarkDestory();
+	bool IsActive() const { return isExpired == false; }
+
+	virtual void OnCollision(const ActorRef& other);
+
 protected:
-	uint64 objectId;
-	Protocol::Vector2 position;
+	uint64					objectId;
+	Protocol::Vector2		position;
+	bool					isExpired = false;
 };
 

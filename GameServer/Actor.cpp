@@ -21,3 +21,12 @@ void Actor::SetObjectId(uint64 objectId)
 {
 	this->objectId = objectId;
 }
+
+void Actor::MarkDestory()
+{
+	isExpired = true;
+}
+
+void Actor::OnCollision(const ActorRef& other)
+{
+}
