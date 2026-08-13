@@ -26,6 +26,8 @@ public:
 
 	bool ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& right);
 
+	void DestoryActors();
+
 private:
 	USE_LOCK;
 

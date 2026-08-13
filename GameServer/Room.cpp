@@ -95,6 +95,8 @@ void Room::Tick(float deltaTime)
 	uint64 elapsedTime = (_prevElapsedTime != 0) ? (GetTickCount64() - _prevElapsedTime) : 0;
 	float fElapsedTime = static_cast<float>(elapsedTime) / 1000.f;
 
+	DestoryActors();
+
 	// TODO : 액터 스폰하는 로직 수정
 	{
 		_elapsedTime += fElapsedTime;
@@ -105,7 +107,7 @@ void Room::Tick(float deltaTime)
 
 			_elapsedTime = 0.f;
 			ActorRef item = ObjectPool<Item>::MakeShared(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_ITEM), x * 100, y * 100, 1);
-			GRoom->DoAsync(&Room::AddActor, item);
+			AddActor(item);
 
 			Protocol::S_SPAWN_ACTOR spawnPkt;
 			spawnPkt.set_id(item->GetObjectId());
@@ -114,7 +116,7 @@ void Room::Tick(float deltaTime)
 			spawnPos->set_y(y * 100);
 
 			auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
-			GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+			DoAsync(&Room::Broadcast, sendBuffer);
 		}
 
 	}
@@ -228,4 +230,18 @@ bool Room::ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& ri
 	rValue.set_y(right.y() / 100);
 
 	return lValue == rValue;
+}
+
+void Room::DestoryActors()
+{
+	for (auto it = _actors.begin(); it < _actors.end();)
+	{
+		if (it->get()->IsActive() == false)
+		{
+			it = _actors.erase(it);
+			continue;
+		}
+
+		++it;
+	}
 }
