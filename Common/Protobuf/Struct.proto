@@ -24,9 +24,17 @@ message ActorInfo
 	Vector2 pos = 2;
 }
 
+message HeadData
+{
+	ActorInfo actor = 1;
+	float moveSpeed = 2;
+	DirectionType dir = 3;
+}
+
 message PlayerInfo
 {
 	uint64 id = 1;
 	string name = 2;
-	ActorInfo actor = 3;
+	HeadData head = 3;
 }
+

@@ -5,12 +5,13 @@ class Actor
 {
 public:
 	Actor() = default;
-	Actor(uint64 objectId, int x, int y);
+	Actor(uint64 objectId, int32 x, int32 y);
 	virtual ~Actor() = default;
 
 	virtual void Tick(float deltaTime);
 
 	const Protocol::Vector2& GetPosition() const { return position; }
+	void SetPosition(const Protocol::Vector2& pos) { position = pos; }
 	void SetPosition(int32 x, int32 y);
 
 	uint64 GetObjectId() const { return objectId; }

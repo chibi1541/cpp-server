@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Actor.h"
 
-Actor::Actor(uint64 objectId, int x, int y)
+Actor::Actor(uint64 objectId, int32 x, int32 y)
 	: objectId(objectId)
 {
 	SetPosition(x, y);

@@ -51,7 +51,7 @@ int main()
 
 	ASSERT_CRASH(service->Start());
 
-	GRoom->DoTimer(200, &Room::Tick, 0.2f);
+	GRoom->DoTimer(50, &Room::Tick, 0.05f);
 
 	for (int32 i = 0; i < 8; i++)
 	{

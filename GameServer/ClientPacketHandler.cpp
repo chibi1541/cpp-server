@@ -29,7 +29,6 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 	loginPkt.set_success(true);
 
 	static Atomic<uint64> idGenerator = 1;
-
 	{
 		auto user = loginPkt.mutable_user();
 		user->set_id(idGenerator);
@@ -39,7 +38,6 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 		playerRef->ownerSession = gameSession;
 
 		gameSession->_player = playerRef;
-
 	}
 
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(loginPkt);
@@ -56,7 +54,6 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 	gameSession->_room = GRoom;
 
-
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> distx(0, 80);
@@ -66,7 +63,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	int y = disty(gen);
 
 	SnakeHeadRef snakeActor = MakeShared<SnakeHead>(
-		ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_HEAD), x, y, gameSession->_player);
+		ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_HEAD), x * 100, y* 100, gameSession->_player);
 	gameSession->_player->headActor = snakeActor;
 
 	GRoom->DoAsync(&Room::Enter, gameSession->_player);
@@ -76,11 +73,18 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		enterGamePkt.set_success(true);
 		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
 		playerInfo->set_id(gameSession->_player->playerId);
+		Protocol::HeadData* headData = new Protocol::HeadData();
+
 		Protocol::ActorInfo* actorInfo = new Protocol::ActorInfo();
-		actorInfo->set_objectid(gameSession->_player->headActor->GetObjectId());
-		Protocol::Vector2* pos = new Protocol::Vector2(gameSession->_player->headActor->GetPosition());
+		actorInfo->set_objectid(snakeActor->GetObjectId());
+		Protocol::Vector2* pos = new Protocol::Vector2(snakeActor->GetPosition());
 		actorInfo->set_allocated_pos(pos);
-		playerInfo->set_allocated_actor(actorInfo);
+
+		headData->set_allocated_actor(actorInfo);
+		headData->set_movespeed(snakeActor->GetMoveSpeed());
+		headData->set_dir(snakeActor->GetDirection());
+
+		playerInfo->set_allocated_head(headData);
 		enterGamePkt.set_allocated_player(playerInfo);
 
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
@@ -91,8 +95,8 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		Protocol::S_SPAWN_ACTOR spawnPkt;
 		spawnPkt.set_id(gameSession->_player.get()->headActor->GetObjectId());
 		Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
-		spawnPos->set_x(x);
-		spawnPos->set_y(y);
+		spawnPos->set_x(x * 100);
+		spawnPos->set_y(y * 100);
 
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
 		GRoom->DoAsync(&Room::Broadcast, sendBuffer);

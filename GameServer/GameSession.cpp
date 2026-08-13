@@ -3,6 +3,7 @@
 #include "GameSessionManager.h"
 #include "ClientPacketHandler.h"
 #include "Room.h"
+#include "Player.h"
 
 void GameSession::OnConnected()
 {
@@ -19,6 +20,8 @@ void GameSession::OnDisconnected()
 		{
 			room->DoAsync(&Room::Leave, _player);
 		}
+
+		_player->ReleaseControlActor();
 	}
 
 	_player = nullptr;

@@ -42,3 +42,8 @@ message S_UPDATE_ROOM
 {
 	repeated ActorInfo actors = 1;
 }
+
+message S_DESTROY_ACTOR
+{
+	uint64 id = 1;
+}

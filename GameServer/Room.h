@@ -9,15 +9,20 @@ public:
 	void Leave(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
 
+	void AddActor(ActorRef newActor);
+	void ReleaseActor(uint64 objectId);
+
 	vector<PlayerRef> GetPlayersLocked();
 
 	PlayerRef GetPlayerLocked(uint64 playerId);
 
-	void AddActor(ActorRef newActor);
-
 	void Tick(float deltaTime);
 
 	void SetDirection(uint64 objectId, Protocol::DirectionType newDir);
+
+	void CheckCollision();
+
+	bool ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& right);
 
 private:
 	USE_LOCK;
@@ -25,7 +30,13 @@ private:
 	map<uint64, PlayerRef> _players;
 
 	vector<ActorRef> _actors;
+	vector<SnakeHeadRef> _heads;
 
+	// temp
+	float _spawnDelta = 3.f;
+	float _elapsedTime = 0.f;
+
+	uint64 _prevElapsedTime = 0;
 };
 
 extern shared_ptr<Room> GRoom;

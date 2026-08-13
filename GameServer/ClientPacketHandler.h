@@ -16,6 +16,7 @@ enum : uint16
 	PKT_S_SPAWN_ACTOR = 1004,
 	PKT_C_MOVE_ACTOR = 1005,
 	PKT_S_UPDATE_ROOM = 1006,
+	PKT_S_DESTROY_ACTOR = 1007,
 };
 
 bool Handle_INVALID(PacketSessionRef& session, BYTE* buffer, int32 len);
@@ -52,6 +53,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::S_ENTER_GAME& pkt) {return MakeSendBuffer(pkt, PKT_S_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_SPAWN_ACTOR& pkt) {return MakeSendBuffer(pkt, PKT_S_SPAWN_ACTOR); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_UPDATE_ROOM& pkt) {return MakeSendBuffer(pkt, PKT_S_UPDATE_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_DESTROY_ACTOR& pkt) {return MakeSendBuffer(pkt, PKT_S_DESTROY_ACTOR); }
 
 
 private:

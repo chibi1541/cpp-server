@@ -5,6 +5,8 @@ class Player
 {
 public:
 	~Player();
+	
+	void ReleaseControlActor();
 
 public:
 
