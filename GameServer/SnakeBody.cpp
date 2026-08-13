@@ -1,5 +1,7 @@
 ﻿#include "pch.h"
 #include "SnakeBody.h"
+#include "SnakeHead.h"
+#include "ObjectIdHandler.h"
 
 SnakeBody::SnakeBody(uint64 objectId, int32 x, int32 y)
 	: Actor(objectId, x, y)
@@ -7,39 +9,22 @@ SnakeBody::SnakeBody(uint64 objectId, int32 x, int32 y)
 
 }
 
+SnakeBody::SnakeBody(uint64 objectId, Vector2 pos)
+	: Actor(objectId, pos)
+{
+}
+
 SnakeBody::~SnakeBody()
 {
+
 }
 
-void SnakeBody::AttachFront(const weak_ptr<Actor>& front)
+void SnakeBody::OnCollision(const ActorRef& other)
 {
-	_front = front;
+	ObjectType objType = ObjectIdHandler::GetObjectType(other->GetObjectId());
 
-	if (ActorRef ref = _front.lock())
+	if (objType == ObjectType::OBJECT_SNAKE_HEAD)
 	{
-		_frontPos = ref->GetPosition();
+		// TODO : 해당 유저 GameOver 처리
 	}
-}
-
-void SnakeBody::Tick(float deltaTime)
-{
-	// Actor::Tick(deltaTime);
-	ActorRef ref = _front.lock();
-	if (ref != nullptr)
-	{
-		// early out
-		if (ref->GetPosition() == _frontPos)
-			return;
-	}
-	else
-	{
-		// 이 경우는 현재 액터가 살아있을 필요가 없음
-		// TODO : 파괴 처리
-
-		return;
-	}
-
-	// 액터를 이동시키고 front에 대한 정보를 갱신
-	SetPosition(_frontPos);
-	_frontPos = ref->GetPosition();
 }

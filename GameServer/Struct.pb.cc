@@ -65,7 +65,8 @@ struct ActorInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ActorInfoDefaultTypeInternal _ActorInfo_default_instance_;
 PROTOBUF_CONSTEXPR HeadData::HeadData(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.actor_)*/nullptr
+    /*decltype(_impl_.bodys_)*/{}
+  , /*decltype(_impl_.actor_)*/nullptr
   , /*decltype(_impl_.movespeed_)*/0
   , /*decltype(_impl_.dir_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -132,6 +133,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::HeadData, _impl_.actor_),
   PROTOBUF_FIELD_OFFSET(::Protocol::HeadData, _impl_.movespeed_),
   PROTOBUF_FIELD_OFFSET(::Protocol::HeadData, _impl_.dir_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::HeadData, _impl_.bodys_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -147,7 +149,7 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 8, -1, -1, sizeof(::Protocol::Vector2)},
   { 16, -1, -1, sizeof(::Protocol::ActorInfo)},
   { 24, -1, -1, sizeof(::Protocol::HeadData)},
-  { 33, -1, -1, sizeof(::Protocol::PlayerInfo)},
+  { 34, -1, -1, sizeof(::Protocol::PlayerInfo)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -163,18 +165,19 @@ const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "User\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\"\037\n\007Vector"
   "2\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"=\n\tActorInfo\022\020\n\010"
   "objectId\030\001 \001(\004\022\036\n\003pos\030\002 \001(\0132\021.Protocol.V"
-  "ector2\"g\n\010HeadData\022\"\n\005actor\030\001 \001(\0132\023.Prot"
-  "ocol.ActorInfo\022\021\n\tmoveSpeed\030\002 \001(\002\022$\n\003dir"
-  "\030\003 \001(\0162\027.Protocol.DirectionType\"H\n\nPlaye"
-  "rInfo\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022 \n\004head\030"
-  "\003 \001(\0132\022.Protocol.HeadDatab\006proto3"
+  "ector2\"\213\001\n\010HeadData\022\"\n\005actor\030\001 \001(\0132\023.Pro"
+  "tocol.ActorInfo\022\021\n\tmoveSpeed\030\002 \001(\002\022$\n\003di"
+  "r\030\003 \001(\0162\027.Protocol.DirectionType\022\"\n\005body"
+  "s\030\004 \003(\0132\023.Protocol.ActorInfo\"H\n\nPlayerIn"
+  "fo\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022 \n\004head\030\003 \001"
+  "(\0132\022.Protocol.HeadDatab\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 353, descriptor_table_protodef_Struct_2eproto,
+    false, false, 390, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 5,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -875,7 +878,8 @@ HeadData::HeadData(const HeadData& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   HeadData* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.actor_){nullptr}
+      decltype(_impl_.bodys_){from._impl_.bodys_}
+    , decltype(_impl_.actor_){nullptr}
     , decltype(_impl_.movespeed_){}
     , decltype(_impl_.dir_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -895,7 +899,8 @@ inline void HeadData::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.actor_){nullptr}
+      decltype(_impl_.bodys_){arena}
+    , decltype(_impl_.actor_){nullptr}
     , decltype(_impl_.movespeed_){0}
     , decltype(_impl_.dir_){0}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -913,6 +918,7 @@ HeadData::~HeadData() {
 
 inline void HeadData::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.bodys_.~RepeatedPtrField();
   if (this != internal_default_instance()) delete _impl_.actor_;
 }
 
@@ -926,6 +932,7 @@ void HeadData::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.bodys_.Clear();
   if (GetArenaForAllocation() == nullptr && _impl_.actor_ != nullptr) {
     delete _impl_.actor_;
   }
@@ -964,6 +971,19 @@ const char* HeadData::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_dir(static_cast<::Protocol::DirectionType>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .Protocol.ActorInfo bodys = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_bodys(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -1020,6 +1040,14 @@ uint8_t* HeadData::_InternalSerialize(
       3, this->_internal_dir(), target);
   }
 
+  // repeated .Protocol.ActorInfo bodys = 4;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_bodys_size()); i < n; i++) {
+    const auto& repfield = this->_internal_bodys(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(4, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1035,6 +1063,13 @@ size_t HeadData::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated .Protocol.ActorInfo bodys = 4;
+  total_size += 1UL * this->_internal_bodys_size();
+  for (const auto& msg : this->_impl_.bodys_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
 
   // .Protocol.ActorInfo actor = 1;
   if (this->_internal_has_actor()) {
@@ -1076,6 +1111,7 @@ void HeadData::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.bodys_.MergeFrom(from._impl_.bodys_);
   if (from._internal_has_actor()) {
     _this->_internal_mutable_actor()->::Protocol::ActorInfo::MergeFrom(
         from._internal_actor());
@@ -1107,6 +1143,7 @@ bool HeadData::IsInitialized() const {
 void HeadData::InternalSwap(HeadData* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.bodys_.InternalSwap(&other->_impl_.bodys_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(HeadData, _impl_.dir_)
       + sizeof(HeadData::_impl_.dir_)

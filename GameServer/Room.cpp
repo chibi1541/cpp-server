@@ -6,6 +6,7 @@
 #include "ObjectIdHandler.h"
 #include "Item.h"
 #include "CollisionSystem.h"
+#include "Actor.h"
 
 shared_ptr<Room> GRoom = make_shared<Room>();
 
@@ -25,7 +26,8 @@ void Room::Enter(PlayerRef player)
 void Room::Leave(PlayerRef player)
 {
 	_players.erase(player->playerId);
-	ReleaseActor(player->headActor->GetObjectId());
+	static_pointer_cast<Actor>(player->headActor)->MarkDestory();
+	player->ReleaseControlActor();
 }
 
 void Room::Broadcast(SendBufferRef sendBuffer)
@@ -132,13 +134,22 @@ void Room::Tick(float deltaTime)
 
 	for (ActorRef actor : _actors)
 	{
-		Protocol::ActorInfo* actorInfo = updatePkt.add_actors();
-		actorInfo->set_objectid(actor->GetObjectId());
-		Protocol::Vector2* pos = new Protocol::Vector2(actor->GetPosition());
-		actorInfo->set_allocated_pos(pos);
+		if (actor->GetObjecType() == ObjectType::OBJECT_SNAKE_HEAD)
+		{
+			SnakeHeadRef head = static_pointer_cast<SnakeHead>(actor);
+			Protocol::HeadData* data = updatePkt.add_heads();
+			head->MakeHeadData(&data);
+		}
+		else
+		{
+			Protocol::ActorInfo* actorInfo = updatePkt.add_actors();
+			actorInfo->set_objectid(actor->GetObjectId());
+			Protocol::Vector2* pos = new Protocol::Vector2(actor->GetPosition());
+			actorInfo->set_allocated_pos(pos);
+		}
 	}
 
-	if (updatePkt.actors_size() > 0)
+	if (updatePkt.actors_size() > 0 || updatePkt.heads_size() > 0)
 	{
 		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(updatePkt);
 		DoAsync(&Room::Broadcast, sendBuffer);
@@ -148,6 +159,11 @@ void Room::Tick(float deltaTime)
 	_prevElapsedTime = GetTickCount64();
 
 	DoTimer(50, &Room::Tick, 0.05f);
+}
+
+void Room::BeginPlay()
+{
+	// TODO : begin play
 }
 
 void Room::SetDirection(uint64 objectId, Protocol::DirectionType newDir)

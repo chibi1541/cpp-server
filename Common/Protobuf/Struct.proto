@@ -29,6 +29,7 @@ message HeadData
 	ActorInfo actor = 1;
 	float moveSpeed = 2;
 	DirectionType dir = 3;
+	repeated ActorInfo bodys = 4;
 }
 
 message PlayerInfo

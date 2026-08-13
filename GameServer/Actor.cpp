@@ -1,10 +1,16 @@
 ﻿#include "pch.h"
 #include "Actor.h"
+#include "ObjectIdHandler.h"
 
 Actor::Actor(uint64 objectId, int32 x, int32 y)
 	: objectId(objectId)
 {
 	SetPosition(x, y);
+}
+
+Actor::Actor(uint64 objectId, Vector2 pos)
+	:objectId(objectId), position(pos)
+{
 }
 
 void Actor::Tick(float deltaTime)
@@ -29,4 +35,9 @@ void Actor::MarkDestory()
 
 void Actor::OnCollision(const ActorRef& other)
 {
+}
+
+ObjectType Actor::GetObjecType() const
+{
+	return ObjectIdHandler::GetObjectType(objectId);
 }

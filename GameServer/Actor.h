@@ -1,11 +1,14 @@
 ﻿#pragma once
 #include "Protocol.pb.h"
 
+using namespace Protocol;
+
 class Actor
 {
 public:
 	Actor() = default;
 	Actor(uint64 objectId, int32 x, int32 y);
+	Actor(uint64 objectId, Vector2 pos);
 	virtual ~Actor() = default;
 
 	virtual void Tick(float deltaTime);
@@ -21,6 +24,8 @@ public:
 	bool IsActive() const { return isExpired == false; }
 
 	virtual void OnCollision(const ActorRef& other);
+
+	ObjectType GetObjecType() const;
 
 protected:
 	uint64					objectId;

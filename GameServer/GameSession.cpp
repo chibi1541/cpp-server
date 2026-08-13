@@ -20,8 +20,6 @@ void GameSession::OnDisconnected()
 		{
 			room->DoAsync(&Room::Leave, _player);
 		}
-
-		_player->ReleaseControlActor();
 	}
 
 	_player = nullptr;

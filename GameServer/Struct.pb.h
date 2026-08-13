@@ -685,10 +685,29 @@ class HeadData final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kBodysFieldNumber = 4,
     kActorFieldNumber = 1,
     kMoveSpeedFieldNumber = 2,
     kDirFieldNumber = 3,
   };
+  // repeated .Protocol.ActorInfo bodys = 4;
+  int bodys_size() const;
+  private:
+  int _internal_bodys_size() const;
+  public:
+  void clear_bodys();
+  ::Protocol::ActorInfo* mutable_bodys(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >*
+      mutable_bodys();
+  private:
+  const ::Protocol::ActorInfo& _internal_bodys(int index) const;
+  ::Protocol::ActorInfo* _internal_add_bodys();
+  public:
+  const ::Protocol::ActorInfo& bodys(int index) const;
+  ::Protocol::ActorInfo* add_bodys();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >&
+      bodys() const;
+
   // .Protocol.ActorInfo actor = 1;
   bool has_actor() const;
   private:
@@ -733,6 +752,7 @@ class HeadData final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo > bodys_;
     ::Protocol::ActorInfo* actor_;
     float movespeed_;
     int dir_;
@@ -1296,6 +1316,46 @@ inline void HeadData::_internal_set_dir(::Protocol::DirectionType value) {
 inline void HeadData::set_dir(::Protocol::DirectionType value) {
   _internal_set_dir(value);
   // @@protoc_insertion_point(field_set:Protocol.HeadData.dir)
+}
+
+// repeated .Protocol.ActorInfo bodys = 4;
+inline int HeadData::_internal_bodys_size() const {
+  return _impl_.bodys_.size();
+}
+inline int HeadData::bodys_size() const {
+  return _internal_bodys_size();
+}
+inline void HeadData::clear_bodys() {
+  _impl_.bodys_.Clear();
+}
+inline ::Protocol::ActorInfo* HeadData::mutable_bodys(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.HeadData.bodys)
+  return _impl_.bodys_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >*
+HeadData::mutable_bodys() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.HeadData.bodys)
+  return &_impl_.bodys_;
+}
+inline const ::Protocol::ActorInfo& HeadData::_internal_bodys(int index) const {
+  return _impl_.bodys_.Get(index);
+}
+inline const ::Protocol::ActorInfo& HeadData::bodys(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.HeadData.bodys)
+  return _internal_bodys(index);
+}
+inline ::Protocol::ActorInfo* HeadData::_internal_add_bodys() {
+  return _impl_.bodys_.Add();
+}
+inline ::Protocol::ActorInfo* HeadData::add_bodys() {
+  ::Protocol::ActorInfo* _add = _internal_add_bodys();
+  // @@protoc_insertion_point(field_add:Protocol.HeadData.bodys)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >&
+HeadData::bodys() const {
+  // @@protoc_insertion_point(field_list:Protocol.HeadData.bodys)
+  return _impl_.bodys_;
 }
 
 // -------------------------------------------------------------------

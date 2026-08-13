@@ -20,6 +20,8 @@ public:
 
 	void Tick(float deltaTime);
 
+	void BeginPlay();
+
 	void SetDirection(uint64 objectId, Protocol::DirectionType newDir);
 
 	void CheckCollision();

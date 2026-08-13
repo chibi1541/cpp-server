@@ -40,7 +40,8 @@ message C_MOVE_ACTOR
 
 message S_UPDATE_ROOM
 {
-	repeated ActorInfo actors = 1;
+	repeated HeadData heads = 1;
+	repeated ActorInfo actors = 2;
 }
 
 message S_DESTROY_ACTOR

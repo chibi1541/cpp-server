@@ -1096,9 +1096,28 @@ class S_UPDATE_ROOM final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kActorsFieldNumber = 1,
+    kHeadsFieldNumber = 1,
+    kActorsFieldNumber = 2,
   };
-  // repeated .Protocol.ActorInfo actors = 1;
+  // repeated .Protocol.HeadData heads = 1;
+  int heads_size() const;
+  private:
+  int _internal_heads_size() const;
+  public:
+  void clear_heads();
+  ::Protocol::HeadData* mutable_heads(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >*
+      mutable_heads();
+  private:
+  const ::Protocol::HeadData& _internal_heads(int index) const;
+  ::Protocol::HeadData* _internal_add_heads();
+  public:
+  const ::Protocol::HeadData& heads(int index) const;
+  ::Protocol::HeadData* add_heads();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >&
+      heads() const;
+
+  // repeated .Protocol.ActorInfo actors = 2;
   int actors_size() const;
   private:
   int _internal_actors_size() const;
@@ -1124,6 +1143,7 @@ class S_UPDATE_ROOM final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData > heads_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo > actors_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1648,7 +1668,44 @@ inline void C_MOVE_ACTOR::set_newdir(::Protocol::DirectionType value) {
 
 // S_UPDATE_ROOM
 
-// repeated .Protocol.ActorInfo actors = 1;
+// repeated .Protocol.HeadData heads = 1;
+inline int S_UPDATE_ROOM::_internal_heads_size() const {
+  return _impl_.heads_.size();
+}
+inline int S_UPDATE_ROOM::heads_size() const {
+  return _internal_heads_size();
+}
+inline ::Protocol::HeadData* S_UPDATE_ROOM::mutable_heads(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_UPDATE_ROOM.heads)
+  return _impl_.heads_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >*
+S_UPDATE_ROOM::mutable_heads() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_UPDATE_ROOM.heads)
+  return &_impl_.heads_;
+}
+inline const ::Protocol::HeadData& S_UPDATE_ROOM::_internal_heads(int index) const {
+  return _impl_.heads_.Get(index);
+}
+inline const ::Protocol::HeadData& S_UPDATE_ROOM::heads(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_UPDATE_ROOM.heads)
+  return _internal_heads(index);
+}
+inline ::Protocol::HeadData* S_UPDATE_ROOM::_internal_add_heads() {
+  return _impl_.heads_.Add();
+}
+inline ::Protocol::HeadData* S_UPDATE_ROOM::add_heads() {
+  ::Protocol::HeadData* _add = _internal_add_heads();
+  // @@protoc_insertion_point(field_add:Protocol.S_UPDATE_ROOM.heads)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >&
+S_UPDATE_ROOM::heads() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_UPDATE_ROOM.heads)
+  return _impl_.heads_;
+}
+
+// repeated .Protocol.ActorInfo actors = 2;
 inline int S_UPDATE_ROOM::_internal_actors_size() const {
   return _impl_.actors_.size();
 }

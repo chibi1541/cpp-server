@@ -100,7 +100,8 @@ struct C_MOVE_ACTORDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_MOVE_ACTORDefaultTypeInternal _C_MOVE_ACTOR_default_instance_;
 PROTOBUF_CONSTEXPR S_UPDATE_ROOM::S_UPDATE_ROOM(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.actors_)*/{}
+    /*decltype(_impl_.heads_)*/{}
+  , /*decltype(_impl_.actors_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S_UPDATE_ROOMDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S_UPDATE_ROOMDefaultTypeInternal()
@@ -179,6 +180,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_UPDATE_ROOM, _impl_.heads_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_UPDATE_ROOM, _impl_.actors_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_DESTROY_ACTOR, _internal_metadata_),
@@ -196,7 +198,7 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 28, -1, -1, sizeof(::Protocol::S_SPAWN_ACTOR)},
   { 36, -1, -1, sizeof(::Protocol::C_MOVE_ACTOR)},
   { 43, -1, -1, sizeof(::Protocol::S_UPDATE_ROOM)},
-  { 50, -1, -1, sizeof(::Protocol::S_DESTROY_ACTOR)},
+  { 51, -1, -1, sizeof(::Protocol::S_DESTROY_ACTOR)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -219,9 +221,10 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "ayerInfo\"@\n\rS_SPAWN_ACTOR\022\n\n\002id\030\001 \001(\004\022#\n"
   "\010spawnPos\030\002 \001(\0132\021.Protocol.Vector2\"7\n\014C_"
   "MOVE_ACTOR\022\'\n\006newdir\030\001 \001(\0162\027.Protocol.Di"
-  "rectionType\"4\n\rS_UPDATE_ROOM\022#\n\006actors\030\001"
-  " \003(\0132\023.Protocol.ActorInfo\"\035\n\017S_DESTROY_A"
-  "CTOR\022\n\n\002id\030\001 \001(\004b\006proto3"
+  "rectionType\"W\n\rS_UPDATE_ROOM\022!\n\005heads\030\001 "
+  "\003(\0132\022.Protocol.HeadData\022#\n\006actors\030\002 \003(\0132"
+  "\023.Protocol.ActorInfo\"\035\n\017S_DESTROY_ACTOR\022"
+  "\n\n\002id\030\001 \001(\004b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -229,7 +232,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 424, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 459, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 8,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -1201,6 +1204,9 @@ class S_UPDATE_ROOM::_Internal {
  public:
 };
 
+void S_UPDATE_ROOM::clear_heads() {
+  _impl_.heads_.Clear();
+}
 void S_UPDATE_ROOM::clear_actors() {
   _impl_.actors_.Clear();
 }
@@ -1214,7 +1220,8 @@ S_UPDATE_ROOM::S_UPDATE_ROOM(const S_UPDATE_ROOM& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   S_UPDATE_ROOM* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.actors_){from._impl_.actors_}
+      decltype(_impl_.heads_){from._impl_.heads_}
+    , decltype(_impl_.actors_){from._impl_.actors_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1226,7 +1233,8 @@ inline void S_UPDATE_ROOM::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.actors_){arena}
+      decltype(_impl_.heads_){arena}
+    , decltype(_impl_.actors_){arena}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -1242,6 +1250,7 @@ S_UPDATE_ROOM::~S_UPDATE_ROOM() {
 
 inline void S_UPDATE_ROOM::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.heads_.~RepeatedPtrField();
   _impl_.actors_.~RepeatedPtrField();
 }
 
@@ -1255,6 +1264,7 @@ void S_UPDATE_ROOM::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.heads_.Clear();
   _impl_.actors_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -1265,16 +1275,29 @@ const char* S_UPDATE_ROOM::_InternalParse(const char* ptr, ::_pbi::ParseContext*
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .Protocol.ActorInfo actors = 1;
+      // repeated .Protocol.HeadData heads = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_heads(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .Protocol.ActorInfo actors = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(_internal_add_actors(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -1307,12 +1330,20 @@ uint8_t* S_UPDATE_ROOM::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .Protocol.ActorInfo actors = 1;
+  // repeated .Protocol.HeadData heads = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_heads_size()); i < n; i++) {
+    const auto& repfield = this->_internal_heads(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // repeated .Protocol.ActorInfo actors = 2;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_actors_size()); i < n; i++) {
     const auto& repfield = this->_internal_actors(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1331,7 +1362,14 @@ size_t S_UPDATE_ROOM::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .Protocol.ActorInfo actors = 1;
+  // repeated .Protocol.HeadData heads = 1;
+  total_size += 1UL * this->_internal_heads_size();
+  for (const auto& msg : this->_impl_.heads_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // repeated .Protocol.ActorInfo actors = 2;
   total_size += 1UL * this->_internal_actors_size();
   for (const auto& msg : this->_impl_.actors_) {
     total_size +=
@@ -1356,6 +1394,7 @@ void S_UPDATE_ROOM::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.heads_.MergeFrom(from._impl_.heads_);
   _this->_impl_.actors_.MergeFrom(from._impl_.actors_);
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1374,6 +1413,7 @@ bool S_UPDATE_ROOM::IsInitialized() const {
 void S_UPDATE_ROOM::InternalSwap(S_UPDATE_ROOM* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.heads_.InternalSwap(&other->_impl_.heads_);
   _impl_.actors_.InternalSwap(&other->_impl_.actors_);
 }
 
