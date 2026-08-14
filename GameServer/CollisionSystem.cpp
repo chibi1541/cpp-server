@@ -21,7 +21,7 @@ void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
     const uint32 count = static_cast<uint32>(actorList.size());
 
     // 모든 액터를 순회하면서 충돌 검사
-    for (int32 i = 0; i < count; ++i)
+    for (uint32 i = 0; i < count; ++i)
     {
         const ActorRef& left = actorList[i];
         if (nullptr == left || left->IsActive() == false)
@@ -29,7 +29,7 @@ void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
             continue;
         }
         
-        for (int32 j = i + 1; j < count; ++j)
+        for (uint32 j = i + 1; j < count; ++j)
         {
             const ActorRef& right = actorList[j];
             if (nullptr == right || right->IsActive() == false)

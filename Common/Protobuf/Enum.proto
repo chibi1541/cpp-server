@@ -23,3 +23,8 @@ enum DirectionType
 	DIR_DOWN = 4;
 }
 
+enum FieldType
+{
+	FIELD_GROUND = 0;
+	FIELD_OBSTACLE = 1; 
+}

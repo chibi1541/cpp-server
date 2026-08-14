@@ -14,12 +14,10 @@ SnakeHead::SnakeHead(PlayerRef owner)
 SnakeHead::SnakeHead(uint64 objectId, int32 x, int32 y, PlayerRef owner)
 	:Actor(objectId, x, y), _owner(owner)
 {
-
 }
 
 SnakeHead::SnakeHead(uint64 objectId, Vector2 pos, PlayerRef owner)
 	:Actor(objectId, pos), _owner(owner)
-
 {
 }
 
@@ -43,24 +41,6 @@ void SnakeHead::SetDirection(Protocol::DirectionType newDirection)
 
 	Protocol::DirectionType prevDir = _direction;
 	_direction = newDirection;
-
-	//int32 xPos = position.x();
-	//int32 yPos = position.y();
-
-
-	//if ((dirType % 2) == 0)
-	//{
-	//	xPos = ((xPos % 100) >= CHECK_VALUE) ? ((xPos / 100) + 1) * 100 : (xPos / 100) * 100;
-	//	yPos = ((yPos % 100) >= CHECK_VALUE) ? ((yPos / 100) + 1) * 100 : (yPos / 100) * 100;
-	//}
-	//else
-	//{
-	//	xPos = ((xPos % 100) <= 100 - CHECK_VALUE) ? (xPos / 100) * 100 : ((xPos / 100) + 1) * 100;
-	//	yPos = ((yPos % 100) <= 100 - CHECK_VALUE) ? (yPos / 100) * 100 : ((yPos / 100) + 1) * 100;
-	//}
-
-
-	//SetPosition(Utils::MakeVector(xPos, yPos));
 
 	cout << "New Dir : " << _direction << " Pos x : " << position.x() << " Pos y : " << position.y() << "\n";
 }
@@ -110,17 +90,33 @@ void SnakeHead::MakeHeadData(Protocol::HeadData** OUT data)
 	(*data)->set_movespeed(_moveSpeed);
 	(*data)->set_dir(_direction);
 
-	for (SnakeBodyRef body : _bodys)
+	for (const Vector2& trail : _trailQueue)
 	{
-		ActorInfo* bodyInfo = (*data)->add_bodys();
-		bodyInfo->set_objectid(body->GetObjectId());
-		bodyInfo->set_allocated_pos(new Vector2(body->GetPosition()));
+		Vector2* newTrail = (*data)->add_trails();
+		newTrail->set_x(trail.x());
+		newTrail->set_y(trail.y());
 	}
 }
 
 void SnakeHead::PushInput(const DirectionType& input)
 {
 	_inputQueue.emplace(input);
+}
+
+void SnakeHead::AddTrail(const Vector2& position)
+{
+	_trailQueue.emplace_back(position);
+
+	if (_addBodyCallCount > 0)
+	{
+		++_trailCount;
+		--_addBodyCallCount;
+	}
+
+	while (_trailQueue.size() > _trailCount)
+	{
+		_trailQueue.pop_front();
+	}
 }
 
 void SnakeHead::Tick(float deltaTime)
@@ -161,10 +157,35 @@ void SnakeHead::Tick(float deltaTime)
 
 	if (prevPos != nextPos)
 	{
-		// temp : Tick 간에 2칸 이상 움직이는 경우가 있으면 알려줌
-		if (::abs(prevPos.x() - nextPos.x() >= 200) || ::abs(prevPos.y() - nextPos.y() >= 200))
+		int32 xDelta = nextPos.x() - prevPos.x();
+		int32 yDelta = nextPos.y() - prevPos.y();
+
+		// 좌표 값 사이의 부호 방향이 나옴
+		int32 xValue = (xDelta != 0) ? (xDelta / ::abs(xDelta)) : 0;
+		int32 yValue = (yDelta != 0) ? (yDelta / ::abs(yDelta)) : 0;
+
+		// 2칸 이상 움직인 겨우 1 이상의 값이 나옴
+		int32 xCount = ::abs(xDelta) - 1;
+		int32 yCount = ::abs(yDelta) - 1;
+
+		AddTrail(prevPos);
+
+		while (xCount > 0)
 		{
-			cout << "2칸 이상 움직임 \n";
+			prevPos.set_x(prevPos.x() + xValue);
+			Vector2 trail = prevPos;
+			
+			AddTrail(trail);
+			--xCount;
+		}
+
+		while (yCount > 0)
+		{
+			prevPos.set_y(prevPos.y() + yValue);
+			Vector2 trail = prevPos;
+
+			AddTrail(trail);
+			--yCount;
 		}
 
 		// input queue 소비
@@ -181,15 +202,18 @@ void SnakeHead::Tick(float deltaTime)
 
 		// 격자에서 좌표 이동
 		// 바디 이동
-		if (_addBodyCallCount > 0)
-		{
-			AddBody(prevPos);
-			--_addBodyCallCount;
-		}
-		else
-		{
-			SwapBody(prevPos);
-		}
+		//if (_addBodyCallCount > 0)
+		//{
+		//	AddBody(prevPos);
+		//	--_addBodyCallCount;
+		//}
+		//else
+		//{
+		//	SwapBody(prevPos);
+		//}
+
+		if(WarningTrailPos())
+			cout << "몸통 좌표 겹침 \n";
 	}
 }
 
@@ -214,4 +238,24 @@ void SnakeHead::MarkDestory()
 			body->MarkDestory();
 		}
 	}
+}
+
+bool SnakeHead::WarningTrailPos()
+{
+	Protocol::Vector2 prev; 
+	prev.set_x(position.x() / 100);
+	prev.set_y(position.y() / 100);
+
+	int size = _trailQueue.size();
+
+	for (int i = 0;i < size - 1; ++i)
+	{
+		for (int j = i + 1; j < size; ++j)
+		{
+			if (_trailQueue[i] == _trailQueue[j])
+				return true;
+		}
+	}
+
+	return false;
 }

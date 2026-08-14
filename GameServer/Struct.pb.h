@@ -685,28 +685,28 @@ class HeadData final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBodysFieldNumber = 4,
+    kTrailsFieldNumber = 4,
     kActorFieldNumber = 1,
     kMoveSpeedFieldNumber = 2,
     kDirFieldNumber = 3,
   };
-  // repeated .Protocol.ActorInfo bodys = 4;
-  int bodys_size() const;
+  // repeated .Protocol.Vector2 trails = 4;
+  int trails_size() const;
   private:
-  int _internal_bodys_size() const;
+  int _internal_trails_size() const;
   public:
-  void clear_bodys();
-  ::Protocol::ActorInfo* mutable_bodys(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >*
-      mutable_bodys();
+  void clear_trails();
+  ::Protocol::Vector2* mutable_trails(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Vector2 >*
+      mutable_trails();
   private:
-  const ::Protocol::ActorInfo& _internal_bodys(int index) const;
-  ::Protocol::ActorInfo* _internal_add_bodys();
+  const ::Protocol::Vector2& _internal_trails(int index) const;
+  ::Protocol::Vector2* _internal_add_trails();
   public:
-  const ::Protocol::ActorInfo& bodys(int index) const;
-  ::Protocol::ActorInfo* add_bodys();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >&
-      bodys() const;
+  const ::Protocol::Vector2& trails(int index) const;
+  ::Protocol::Vector2* add_trails();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Vector2 >&
+      trails() const;
 
   // .Protocol.ActorInfo actor = 1;
   bool has_actor() const;
@@ -752,7 +752,7 @@ class HeadData final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo > bodys_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Vector2 > trails_;
     ::Protocol::ActorInfo* actor_;
     float movespeed_;
     int dir_;
@@ -1318,44 +1318,44 @@ inline void HeadData::set_dir(::Protocol::DirectionType value) {
   // @@protoc_insertion_point(field_set:Protocol.HeadData.dir)
 }
 
-// repeated .Protocol.ActorInfo bodys = 4;
-inline int HeadData::_internal_bodys_size() const {
-  return _impl_.bodys_.size();
+// repeated .Protocol.Vector2 trails = 4;
+inline int HeadData::_internal_trails_size() const {
+  return _impl_.trails_.size();
 }
-inline int HeadData::bodys_size() const {
-  return _internal_bodys_size();
+inline int HeadData::trails_size() const {
+  return _internal_trails_size();
 }
-inline void HeadData::clear_bodys() {
-  _impl_.bodys_.Clear();
+inline void HeadData::clear_trails() {
+  _impl_.trails_.Clear();
 }
-inline ::Protocol::ActorInfo* HeadData::mutable_bodys(int index) {
-  // @@protoc_insertion_point(field_mutable:Protocol.HeadData.bodys)
-  return _impl_.bodys_.Mutable(index);
+inline ::Protocol::Vector2* HeadData::mutable_trails(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.HeadData.trails)
+  return _impl_.trails_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >*
-HeadData::mutable_bodys() {
-  // @@protoc_insertion_point(field_mutable_list:Protocol.HeadData.bodys)
-  return &_impl_.bodys_;
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Vector2 >*
+HeadData::mutable_trails() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.HeadData.trails)
+  return &_impl_.trails_;
 }
-inline const ::Protocol::ActorInfo& HeadData::_internal_bodys(int index) const {
-  return _impl_.bodys_.Get(index);
+inline const ::Protocol::Vector2& HeadData::_internal_trails(int index) const {
+  return _impl_.trails_.Get(index);
 }
-inline const ::Protocol::ActorInfo& HeadData::bodys(int index) const {
-  // @@protoc_insertion_point(field_get:Protocol.HeadData.bodys)
-  return _internal_bodys(index);
+inline const ::Protocol::Vector2& HeadData::trails(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.HeadData.trails)
+  return _internal_trails(index);
 }
-inline ::Protocol::ActorInfo* HeadData::_internal_add_bodys() {
-  return _impl_.bodys_.Add();
+inline ::Protocol::Vector2* HeadData::_internal_add_trails() {
+  return _impl_.trails_.Add();
 }
-inline ::Protocol::ActorInfo* HeadData::add_bodys() {
-  ::Protocol::ActorInfo* _add = _internal_add_bodys();
-  // @@protoc_insertion_point(field_add:Protocol.HeadData.bodys)
+inline ::Protocol::Vector2* HeadData::add_trails() {
+  ::Protocol::Vector2* _add = _internal_add_trails();
+  // @@protoc_insertion_point(field_add:Protocol.HeadData.trails)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::ActorInfo >&
-HeadData::bodys() const {
-  // @@protoc_insertion_point(field_list:Protocol.HeadData.bodys)
-  return _impl_.bodys_;
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::Vector2 >&
+HeadData::trails() const {
+  // @@protoc_insertion_point(field_list:Protocol.HeadData.trails)
+  return _impl_.trails_;
 }
 
 // -------------------------------------------------------------------

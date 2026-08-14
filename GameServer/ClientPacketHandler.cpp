@@ -56,10 +56,10 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distx(0, 80);
+	std::uniform_int_distribution<int> distx(0, GRoom->GetFieldWidth() - 1);
 	int x = distx(gen);
 
-	std::uniform_int_distribution<int> disty(0, 20);
+	std::uniform_int_distribution<int> disty(0, GRoom->GetFieldHeight() - 1);
 	int y = disty(gen);
 
 	SnakeHeadRef snakeActor = MakeShared<SnakeHead>(
@@ -71,6 +71,10 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	{
 		Protocol::S_ENTER_GAME enterGamePkt;
 		enterGamePkt.set_success(true);
+
+		enterGamePkt.set_width(GRoom->GetFieldWidth());
+		enterGamePkt.set_height(GRoom->GetFieldHeight());
+
 		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
 		playerInfo->set_id(gameSession->_player->playerId);
 		Protocol::HeadData* headData = new Protocol::HeadData();

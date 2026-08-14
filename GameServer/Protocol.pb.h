@@ -612,10 +612,12 @@ class S_ENTER_GAME final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayerFieldNumber = 2,
+    kPlayerFieldNumber = 4,
     kSuccessFieldNumber = 1,
+    kWidthFieldNumber = 2,
+    kHeightFieldNumber = 3,
   };
-  // .Protocol.PlayerInfo player = 2;
+  // .Protocol.PlayerInfo player = 4;
   bool has_player() const;
   private:
   bool _internal_has_player() const;
@@ -642,6 +644,24 @@ class S_ENTER_GAME final :
   void _internal_set_success(bool value);
   public:
 
+  // uint32 width = 2;
+  void clear_width();
+  uint32_t width() const;
+  void set_width(uint32_t value);
+  private:
+  uint32_t _internal_width() const;
+  void _internal_set_width(uint32_t value);
+  public:
+
+  // uint32 height = 3;
+  void clear_height();
+  uint32_t height() const;
+  void set_height(uint32_t value);
+  private:
+  uint32_t _internal_height() const;
+  void _internal_set_height(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.S_ENTER_GAME)
  private:
   class _Internal;
@@ -652,6 +672,8 @@ class S_ENTER_GAME final :
   struct Impl_ {
     ::Protocol::PlayerInfo* player_;
     bool success_;
+    uint32_t width_;
+    uint32_t height_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1446,7 +1468,47 @@ inline void S_ENTER_GAME::set_success(bool value) {
   // @@protoc_insertion_point(field_set:Protocol.S_ENTER_GAME.success)
 }
 
-// .Protocol.PlayerInfo player = 2;
+// uint32 width = 2;
+inline void S_ENTER_GAME::clear_width() {
+  _impl_.width_ = 0u;
+}
+inline uint32_t S_ENTER_GAME::_internal_width() const {
+  return _impl_.width_;
+}
+inline uint32_t S_ENTER_GAME::width() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ENTER_GAME.width)
+  return _internal_width();
+}
+inline void S_ENTER_GAME::_internal_set_width(uint32_t value) {
+  
+  _impl_.width_ = value;
+}
+inline void S_ENTER_GAME::set_width(uint32_t value) {
+  _internal_set_width(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_ENTER_GAME.width)
+}
+
+// uint32 height = 3;
+inline void S_ENTER_GAME::clear_height() {
+  _impl_.height_ = 0u;
+}
+inline uint32_t S_ENTER_GAME::_internal_height() const {
+  return _impl_.height_;
+}
+inline uint32_t S_ENTER_GAME::height() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ENTER_GAME.height)
+  return _internal_height();
+}
+inline void S_ENTER_GAME::_internal_set_height(uint32_t value) {
+  
+  _impl_.height_ = value;
+}
+inline void S_ENTER_GAME::set_height(uint32_t value) {
+  _internal_set_height(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_ENTER_GAME.height)
+}
+
+// .Protocol.PlayerInfo player = 4;
 inline bool S_ENTER_GAME::_internal_has_player() const {
   return this != internal_default_instance() && _impl_.player_ != nullptr;
 }

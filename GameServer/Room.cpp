@@ -14,6 +14,27 @@ Room::Room()
 {
 	// TODO : 룸 세분화 시에 별도의 초기화 로직 준비
 	collisionSys = make_unique<CollisionSystem>();
+
+	int32 fieldSize = WIDTH * HEIGHT;
+
+	_field = new FieldInfo[fieldSize]();
+	::memset(_field, 0, sizeof(FieldInfo) * fieldSize);
+
+	for (int32 idx = 0; idx < fieldSize; ++idx)
+	{
+		// 왼쪽 오른쪽 테두리
+		if ((idx % WIDTH) == 0 || (idx % WIDTH) == WIDTH - 1)
+			_field[idx].fieldType = FieldType::FIELD_OBSTACLE;
+
+		// 위 아래 테두리
+		if ((idx / WIDTH) == 0 || (idx / WIDTH) == HEIGHT - 1)
+			_field[idx].fieldType = FieldType::FIELD_OBSTACLE;
+	}
+}
+
+Room::~Room()
+{
+	delete[] _field;
 }
 
 void Room::Enter(PlayerRef player)
@@ -100,12 +121,13 @@ void Room::Tick(float deltaTime)
 	DestoryActors();
 
 	// TODO : 액터 스폰하는 로직 수정
+	if(_players.size() > 0)
 	{
 		_elapsedTime += fElapsedTime;
 		if (_spawnDelta <= _elapsedTime)
 		{
-			int32 x = RandomRange32(0, 80);
-			int32 y = RandomRange32(0, 20);
+			int32 x = RandomRange32(1, 79);
+			int32 y = RandomRange32(1, 19);
 
 			_elapsedTime = 0.f;
 			ActorRef item = ObjectPool<Item>::MakeShared(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_ITEM), x * 100, y * 100, 1);
