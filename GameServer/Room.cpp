@@ -62,7 +62,7 @@ PlayerRef Room::GetPlayerLocked(uint64 playerId)
 
 void Room::AddActor(ActorRef newActor)
 {
-	_actors.emplace_back(newActor);
+	_addRequestedActorList.emplace_back(newActor);
 }
 
 
@@ -123,6 +123,8 @@ void Room::Tick(float deltaTime)
 
 	}
 
+	RegisterActors();
+
 	for (ActorRef actor : _actors)
 	{
 		actor->Tick(fElapsedTime);
@@ -176,7 +178,8 @@ void Room::SetDirection(uint64 objectId, Protocol::DirectionType newDir)
 		if (actor->GetObjectId() == objectId)
 		{
 			SnakeHeadRef head = static_pointer_cast<SnakeHead>(actor);
-			head->SetDirection(newDir);
+			// 입력 큐에 추가
+			head->PushInput(newDir);
 		}
 	}
 }
@@ -260,4 +263,17 @@ void Room::DestoryActors()
 
 		++it;
 	}
+}
+
+void Room::RegisterActors()
+{
+	if (_addRequestedActorList.size() > 0)
+	{
+		for (ActorRef newActor : _addRequestedActorList)
+		{
+			_actors.emplace_back(newActor);
+		}
+	}
+
+	_addRequestedActorList.clear();
 }

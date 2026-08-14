@@ -30,6 +30,9 @@ public:
 
 	void DestoryActors();
 
+	void RegisterActors();
+
+
 private:
 	USE_LOCK;
 
@@ -37,6 +40,8 @@ private:
 
 	vector<ActorRef> _actors;
 	vector<SnakeHeadRef> _heads;
+
+	vector<ActorRef> _addRequestedActorList;
 
 	// temp
 	float _spawnDelta = 3.f;

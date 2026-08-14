@@ -7,18 +7,18 @@
 #include "ClientPacketHandler.h"
 
 SnakeHead::SnakeHead(PlayerRef owner)
-	: owner(owner)
+	: _owner(owner)
 {
 }
 
 SnakeHead::SnakeHead(uint64 objectId, int32 x, int32 y, PlayerRef owner)
-	:Actor(objectId, x, y), owner(owner)
+	:Actor(objectId, x, y), _owner(owner)
 {
 
 }
 
 SnakeHead::SnakeHead(uint64 objectId, Vector2 pos, PlayerRef owner)
-	:Actor(objectId, pos), owner(owner)
+	:Actor(objectId, pos), _owner(owner)
 
 {
 }
@@ -44,25 +44,25 @@ void SnakeHead::SetDirection(Protocol::DirectionType newDirection)
 	Protocol::DirectionType prevDir = _direction;
 	_direction = newDirection;
 
-	int32 xPos = position.x();
-	int32 yPos = position.y();
+	//int32 xPos = position.x();
+	//int32 yPos = position.y();
 
 
-	if ((dirType % 2) == 0)
-	{
-		xPos = ((xPos % 100) >= CHECK_VALUE) ? ((xPos / 100) + 1) * 100 : (xPos / 100) * 100;
-		yPos = ((yPos % 100) >= CHECK_VALUE) ? ((yPos / 100) + 1) * 100 : (yPos / 100) * 100;
-	}
-	else
-	{
-		xPos = ((xPos % 100) <= 100 - CHECK_VALUE) ? (xPos / 100) * 100 : ((xPos / 100) + 1) * 100;
-		yPos = ((yPos % 100) <= 100 - CHECK_VALUE) ? (yPos / 100) * 100 : ((yPos / 100) + 1) * 100;
-	}
+	//if ((dirType % 2) == 0)
+	//{
+	//	xPos = ((xPos % 100) >= CHECK_VALUE) ? ((xPos / 100) + 1) * 100 : (xPos / 100) * 100;
+	//	yPos = ((yPos % 100) >= CHECK_VALUE) ? ((yPos / 100) + 1) * 100 : (yPos / 100) * 100;
+	//}
+	//else
+	//{
+	//	xPos = ((xPos % 100) <= 100 - CHECK_VALUE) ? (xPos / 100) * 100 : ((xPos / 100) + 1) * 100;
+	//	yPos = ((yPos % 100) <= 100 - CHECK_VALUE) ? (yPos / 100) * 100 : ((yPos / 100) + 1) * 100;
+	//}
 
 
-	SetPosition(Utils::MakeVector(xPos, yPos));
+	//SetPosition(Utils::MakeVector(xPos, yPos));
 
-	cout << "New Dir : " << _direction << " Pos x : " << xPos << " Pos y : " << yPos << "\n";
+	cout << "New Dir : " << _direction << " Pos x : " << position.x() << " Pos y : " << position.y() << "\n";
 }
 
 void SnakeHead::AddBody(const Vector2 position)
@@ -118,6 +118,11 @@ void SnakeHead::MakeHeadData(Protocol::HeadData** OUT data)
 	}
 }
 
+void SnakeHead::PushInput(const DirectionType& input)
+{
+	_inputQueue.emplace(input);
+}
+
 void SnakeHead::Tick(float deltaTime)
 {
 	// Actor::Tick(deltaTime);
@@ -156,6 +161,21 @@ void SnakeHead::Tick(float deltaTime)
 
 	if (prevPos != nextPos)
 	{
+		// temp : Tick 간에 2칸 이상 움직이는 경우가 있으면 알려줌
+		if (::abs(prevPos.x() - nextPos.x() >= 200) || ::abs(prevPos.y() - nextPos.y() >= 200))
+		{
+			cout << "2칸 이상 움직임 \n";
+		}
+
+		// input queue 소비
+		if(_inputQueue.empty() == false)
+		{ 
+			DirectionType newDir = _inputQueue.front();
+			_inputQueue.pop();
+
+			SetDirection(newDir);
+		}
+
 		prevPos.set_x(prevPos.x() * 100);
 		prevPos.set_y(prevPos.y() * 100);
 

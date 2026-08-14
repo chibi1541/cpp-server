@@ -23,6 +23,8 @@ public:
 
 	void MakeHeadData(Protocol::HeadData** OUT data);
 
+	void PushInput(const DirectionType& input);
+
 private:
 	virtual void Tick(float deltaTime) override;
 
@@ -31,7 +33,9 @@ private:
 	virtual void MarkDestory() override;
 
 private:
-	PlayerRef					owner;		// 참조 사이클 주의!
+	queue<DirectionType>		_inputQueue;	// 클라로부터 받은 입력을 바로 처리하지 않고 좌표가 1이라도 변경된 후에 하나씩 처리
+
+	PlayerRef					_owner;		// 참조 사이클 주의!
 	deque<SnakeBodyRef>			_bodys;
 	Protocol::DirectionType		_direction = Protocol::DirectionType::DIR_RIGHT;
 	uint32						_tailIndex = 0;
