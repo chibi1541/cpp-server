@@ -54,13 +54,8 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 	gameSession->_room = GRoom;
 
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distx(0, GRoom->GetFieldWidth() - 1);
-	int x = distx(gen);
-
-	std::uniform_int_distribution<int> disty(0, GRoom->GetFieldHeight() - 1);
-	int y = disty(gen);
+	int x = GRoom->GetFieldWidth()/2;
+	int y = GRoom->GetFieldHeight()/2;
 
 	SnakeHeadRef snakeActor = MakeShared<SnakeHead>(
 		ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_HEAD), x * 100, y* 100, gameSession->_player);

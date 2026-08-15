@@ -4,6 +4,7 @@
 #include "Struct.pb.h"
 #include "Utils.h"
 #include "Room.h"
+#include "SnakeHead.h"
 
 #define CHECK_VALUE 80
 
@@ -63,15 +64,8 @@ void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
 	// 충돌한 액터에 이벤트 전달
 	for (const CollisionPair& pair : collidedActorList)
 	{
-		// 이미 삭제되거나 비활성화 된 액터는 제외
-		if (!pair.actor->IsActive() || !pair.other->IsActive())
-		{
-			continue;
-		}
-
 		// 충돌 이벤트 전달
 		pair.actor->OnCollision(ObjectType::OBJECT_SNAKE_HEAD);
-		pair.other->OnCollision(ObjectType::OBJECT_SNAKE_HEAD);
 	}
 }
 
@@ -79,22 +73,17 @@ void CollisionSystem::ProcessFieldCheck(const vector<ActorRef>& actorList, const
 {
 	ASSERT_CRASH(field != nullptr);
 
-
 	for (const ActorRef& actor : actorList)
 	{
 		const vector<Vector2>& checkList = actor->GetCollisionCheckArea();
-		for(const Vector2& pos : checkList)
+		for (const Vector2& pos : checkList)
 		{
 			uint32 index = (width * pos.y()) + pos.x();
 
 			if (field[index].CheckFlag(Protocol::FieldType::FIELD_ITEM))
 			{
 				actor->OnCollision(ObjectType::OBJECT_ITEM);
-			}
-
-			if (field[index].CheckFlag(Protocol::FieldType::FIELD_OBSTACLE))
-			{
-				actor->OnCollision(ObjectType::OBJECT_ACTOR);
+				GRoom->RemoveFieldFlag(pos.x(), pos.y(), FieldType::FIELD_ITEM);
 			}
 		}
 	}
@@ -107,14 +96,15 @@ bool CollisionSystem::Test(const ActorRef& left, const ActorRef& right)
 		return false;
 	}
 
-	const vector<Vector2>& leftCheckList = left->GetCollisionCheckArea();
-	const vector<Vector2>& rightCheckList = right->GetCollisionCheckArea();
+	SnakeHeadRef rHead = static_pointer_cast<SnakeHead>(right);
+	const vector<Vector2> leftCheckArea = left->GetCollisionCheckArea();
+	const vector<Vector2> rightCheckArea = rHead->GetSnakeArray();
 
-	for(const Vector2& leftPos : leftCheckList)
+	for (const Vector2& leftPos : leftCheckArea)
 	{
-		for(const Vector2 rightPos : rightCheckList)
+		for (const Vector2 rightPos : rightCheckArea)
 		{
-			if(leftPos == rightPos)
+			if (leftPos == rightPos)
 				return true;
 		}
 	}

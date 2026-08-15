@@ -9,7 +9,7 @@ public:
 		fieldFlag = fieldFlag | flag;
 	}
 
-	void AddRemoveFlag(const Protocol::FieldType& flag)
+	void RemoveFieldFlag(const Protocol::FieldType& flag)
 	{
 		fieldFlag = fieldFlag & ~flag;
 	}
@@ -94,6 +94,8 @@ private:
 	// TODO : 룸 사이즈 체크 시스템화
 	uint32 _width = 0;
 	uint32 _height = 0;
+
+	uint32 _itemCount = 0;
 
 	FieldInfo* _field;
 };

@@ -42,7 +42,7 @@ ObjectType Actor::GetObjecType() const
 	return ObjectIdHandler::GetObjectType(objectId);
 }
 
-const vector<Vector2> Actor::GetCollisionCheckArea()
+const vector<Vector2> Actor::GetCollisionCheckArea() const
 {
 	return vector<Vector2>();
 }

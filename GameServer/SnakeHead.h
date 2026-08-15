@@ -35,14 +35,18 @@ public:
 
 	const deque<Protocol::TrailData>& GetTrailQueue() const {return _trailQueue; }
 
-private:
-	virtual void Tick(float deltaTime) override;
+	const vector<Vector2> GetSnakeArray() const;
+
+	bool SelfCheck() const;
 
 	virtual void OnCollision(const Protocol::ObjectType& objectType) override;
 
+private:
+	virtual void Tick(float deltaTime) override;
+
 	virtual void MarkDestory() override;
 
-	virtual const vector<Vector2> GetCollisionCheckArea() override;
+	virtual const vector<Vector2> GetCollisionCheckArea() const override;
 
 	void Move(float detaTime);
 

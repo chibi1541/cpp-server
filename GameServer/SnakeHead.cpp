@@ -46,42 +46,6 @@ void SnakeHead::SetDirection(Protocol::DirectionType newDirection)
 	return;
 }
 
-//void SnakeHead::AddBody(const Vector2 position)
-//{
-//	SnakeBodyRef newTail = _bodys.emplace_front(
-//		make_shared<SnakeBody>(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_BODY), position));
-//
-//	GRoom->AddActor(newTail);
-//
-//	// TODO : 꼬리 생성용 패킷으로 교체
-//	// 꼬리 스폰 패킷 브로드캐스팅
-//	Protocol::S_SPAWN_ACTOR pkt;
-//	pkt.set_id(newTail->GetObjectId());
-//	pkt.set_allocated_spawnpos(new Vector2(position));
-//
-//	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-//	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
-//}
-//
-//void SnakeHead::SwapBody(const Vector2 position)
-//{
-//	// 꼬리 부분을 머리 앞 부분으로 이동
-//	if (_bodys.size() == 1)
-//	{
-//		// 몸체가 꼬리 밖에 없으므로 좌표만 이동
-//		_bodys[0]->SetPosition(position);
-//	}
-//
-//	else if(_bodys.size() > 1)
-//	{
-//		int tailIdx = _bodys.size() - 1;
-//		SnakeBodyRef tailRef = _bodys.back();
-//		_bodys.pop_back();
-//		tailRef->SetPosition(position);
-//		_bodys.emplace_front(tailRef);
-//	}
-//}
-
 void SnakeHead::MakeHeadData(Protocol::HeadData** OUT data)
 {
 	ActorInfo* actor = (*data)->mutable_actor();
@@ -124,6 +88,7 @@ void SnakeHead::AddTrail(const Vector2& pos)
 	newTrail.set_curdir(_direction);
 
 	_trailQueue.emplace_back(newTrail);
+	GRoom->AddFieldFlag(newTrail.pos().x(), newTrail.pos().y(), FieldType::FIELD_OBSTACLE);
 
 	if (_addBodyCallCount > 0)
 	{
@@ -133,7 +98,9 @@ void SnakeHead::AddTrail(const Vector2& pos)
 
 	while (_trailQueue.size() > _trailCount)
 	{
+		Protocol::TrailData trail = _trailQueue.front();
 		_trailQueue.pop_front();
+		GRoom->RemoveFieldFlag(trail.pos().x(), trail.pos().y(), FieldType::FIELD_OBSTACLE);
 	}
 }
 
@@ -146,6 +113,47 @@ DirectionType SnakeHead::FindTrailDir(const Vector2 pos)
 	}
 
 	return DirectionType::DIR_NONE;
+}
+
+const vector<Vector2> SnakeHead::GetSnakeArray() const
+{
+	vector<Vector2> ret;
+	Vector2 pos;
+	pos.set_x(position.x() / 100);
+	pos.set_y(position.y() / 100);
+
+	ret.emplace_back(pos);
+
+	for (int32 index = static_cast<int32>(_trailQueue.size()) - 1; index > 0; --index)
+	{
+		ret.emplace_back(_trailQueue[index].pos());
+	}
+	
+	return ret; 
+}
+
+bool SnakeHead::SelfCheck() const
+{
+	const vector<Vector2> checkArea = GetCollisionCheckArea();
+	const vector<Vector2> fullArea = GetSnakeArray();
+
+	if(checkArea.size() >= fullArea.size())
+		return false;
+
+	for(const Vector2& check : checkArea)
+	{
+		// checkArea 수만큼  넘어감(당연히 같을 것이기 때문에)
+		for(int32 index = static_cast<int32>(checkArea.size()); index < static_cast<int32>(fullArea.size()); ++index)
+		{
+			// 자기 몸통이랑 충돌이 발생
+			if(check == fullArea[index])
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 void SnakeHead::Tick(float deltaTime)
@@ -246,7 +254,7 @@ void SnakeHead::OnCollision(const Protocol::ObjectType& objectType)
 	switch(objectType)
 	{
 		case Protocol::ObjectType::OBJECT_SNAKE_HEAD:
-		case Protocol::ObjectType::OBJECT_ACTOR:
+		case Protocol::ObjectType::OBJECT_SNAKE_BODY:
 			MarkDestory();
 			break;
 
@@ -262,19 +270,27 @@ void SnakeHead::MarkDestory()
 	Actor::MarkDestory();
 }
 
-const vector<Vector2> SnakeHead::GetCollisionCheckArea()
+const vector<Vector2> SnakeHead::GetCollisionCheckArea() const
 {
 	vector<Vector2> ret;
-	ret.emplace_back(position);
-	if(position != prevPos)
+	Vector2 current;
+	current.set_x(position.x() / 100);
+	current.set_y(position.y() / 100);
+
+	ret.emplace_back(current);
+
+	Vector2 prev;
+	prev.set_x(prevPos.x() / 100);
+	prev.set_y(prevPos.y() / 100);
+	if(current != prev)
 	{
 		for(int32 index = static_cast<int32>(_trailQueue.size())- 1 ; index > 0 ; --index)
 		{
-			ret.emplace_back(_trailQueue[index].pos());
-			
 			// 큐의 마지막(머리 바로 뒤의 몸통)부터 순서대로 순회하면서 궤적을 체크 영역으로 반환
-			if(_trailQueue[index].pos() == prevPos)
+			if (_trailQueue[index].pos() == prev)
 				break;
+
+			ret.emplace_back(_trailQueue[index].pos());
 		}
 	}
 
@@ -297,7 +313,9 @@ void SnakeHead::Move(float detaTime)
 		SnakeHead::AsixType axisType = static_cast<SnakeHead::AsixType>(static_cast<int32>(_direction) / static_cast<int32>(AsixType::NUMBER));
 		int32 moveValue = (static_cast<int32>(_direction) % 2 == 0) ? 1 : -1;
 
-		const Vector2 prev = position;
+		Vector2 prev;
+		prev.set_x(position.x()/100);
+		prev.set_y(position.y()/100);
 		
 		// 좌우로 이동 중
 		if (axisType == SnakeHead::AsixType::X)
@@ -305,7 +323,8 @@ void SnakeHead::Move(float detaTime)
 			int32 xNextPos = position.x();
 
 			// 진행 방향으로 다음 그리드 정위치 값을 찾음
-			int32 nextX = ((position.x() / 100) + moveValue) * 100;
+			// -축으로 이동하는 경우 1000 -> 999 로 1만 이동해도 값 좌표가 바뀌니 99를 기준으로 다음 위치를 찾음
+			int32 nextX = (moveValue > 0) ? ((position.x() / 100) + moveValue) * 100 : ((position.x() / 100) * 100) + moveValue;
 
 			// 다음 그리드까지 남은 시간을 구함
 			float needTime = (nextX - xNextPos) / (moveValue * _moveSpeed * 100);
@@ -336,7 +355,7 @@ void SnakeHead::Move(float detaTime)
 			int32 yNextPos = position.y();
 
 			// 진행 방향으로 다음 그리드 정위치 값을 찾음
-			int32 nextY = ((position.y() / 100) + moveValue) * 100;
+			int32 nextY = (moveValue > 0) ? ((position.y() / 100) + moveValue) * 100 : ((position.y() / 100) * 100) + moveValue;
 
 			// TODO : 속도 및 좌표 보정치(0.66f, 100 ...) 매직 넘버화
 			float needTime = (nextY - yNextPos) / (moveValue * (_moveSpeed * /* y축 이동이 체감상 너무 빨리서 속도 보정*/0.66f) * 100);

@@ -29,7 +29,7 @@ public:
 
 	ObjectType GetObjecType() const;
 
-	virtual const vector<Vector2> GetCollisionCheckArea();
+	virtual const vector<Vector2> GetCollisionCheckArea() const;
 
 protected:
 	uint64						objectId;

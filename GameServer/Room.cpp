@@ -121,33 +121,22 @@ void Room::Tick(float deltaTime)
 	float fElapsedTime = static_cast<float>(elapsedTime) / 1000.f;
 
 	// TODO : 아이템 추가 로직 수정
-	if (_players.size() > 0)
+	if (_players.size() > 0 && _itemCount < 150)
 	{
 		_elapsedTime += fElapsedTime;
 		if (_spawnDelta <= _elapsedTime)
 		{
 			int32 x = RandomRange32(1, 79);
-			int32 y = RandomRange32(1, 19);
+			int32 y = RandomRange32(1, 29);
 
-			AddFieldFlag(x, y, Protocol::FIELD_ITEM);
-
-			//_elapsedTime = 0.f;
-			//ActorRef item = ObjectPool<Item>::MakeShared(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_ITEM), x * 100, y * 100, 1);
-			//AddActor(item);
-
-			//Protocol::S_SPAWN_ACTOR spawnPkt;
-			//spawnPkt.set_id(item->GetObjectId());
-			//Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
-			//spawnPos->set_x(x * 100);
-			//spawnPos->set_y(y * 100);
-
-			//auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
-			//DoAsync(&Room::Broadcast, sendBuffer);
+			if(GetFieldInfo(x, y).CheckFlag(Protocol::FIELD_ITEM) == false)
+				AddFieldFlag(x, y, Protocol::FIELD_ITEM);
 		}
 
 	}
 
 	RegisterActors();
+
 
 	for (ActorRef actor : _actors)
 	{
@@ -157,8 +146,15 @@ void Room::Tick(float deltaTime)
 	// 액터끼리(뱀 머리)의 충돌 판정
 	collisionSys->ProcessCollision(_actors);
 
+	// 자기영역 체크
+	for (SnakeHeadRef head : _heads)
+	{
+		if(head->SelfCheck())
+			head->OnCollision(ObjectType::OBJECT_SNAKE_BODY);
+	}
+
 	// 맵 정보와 충돌 판정
-	collisionSys->ProcessFieldCheck(_actors, _field, _width, _height);
+	collisionSys->ProcessFieldCheck(_actors, _field, WIDTH, HEIGHT);
 
 	// 파괴 처리
 	DestoryActors();
@@ -168,8 +164,6 @@ void Room::Tick(float deltaTime)
 
 	for (ActorRef actor : _actors)
 	{
-
-
 		if (actor->GetObjecType() == ObjectType::OBJECT_SNAKE_HEAD)
 		{
 			SnakeHeadRef head = static_pointer_cast<SnakeHead>(actor);
@@ -178,20 +172,24 @@ void Room::Tick(float deltaTime)
 		}
 	}
 
-	for (uint32 index = 0; index < _width * _height; ++index)
+	for (uint32 index = 0; index < WIDTH * HEIGHT; ++index)
 	{
-		if (_field[index].IsGround())
+		if(false == _field[index].CheckFlag(FieldType::FIELD_ITEM))
 			continue;
 
 		Protocol::FieldData* field = updatePkt.add_fielddata();
 		field->set_fieldflag(_field[index].GetFlag());
 		Protocol::Vector2* pos = field->mutable_pos();
-		pos->set_x(index % _width);
-		pos->set_y(index / _width);
+		pos->set_x(index % WIDTH);
+		pos->set_y(index / WIDTH);
 	}
 
-	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(updatePkt);
-	DoAsync(&Room::Broadcast, sendBuffer);
+	if(updatePkt.heads_size() > 0 || updatePkt.fielddata_size() > 0)
+	{
+		_itemCount = static_cast<uint32>(updatePkt.fielddata_size());
+		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(updatePkt);
+		DoAsync(&Room::Broadcast, sendBuffer);
+	}
 
 	_prevElapsedTime = GetTickCount64();
 
@@ -289,7 +287,9 @@ bool Room::ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& ri
 void Room::ProcessDestoryActor(Actor* actor)
 {
 	Vector2 pos = actor->GetPosition();
-	int32 index = pos.y() * _width + pos.x();
+	pos.set_x(pos.x()/ 100);
+	pos.set_y(pos.y()/ 100);
+	int32 index = pos.y() * WIDTH + pos.x();
 	_field[index].AddFieldFlag(Protocol::FieldType::FIELD_ITEM);
 
 	SnakeHead* head = dynamic_cast<SnakeHead*>(actor);
@@ -297,8 +297,9 @@ void Room::ProcessDestoryActor(Actor* actor)
 	for (auto trail : trails)
 	{
 		pos = trail.pos();
-		index = pos.y() * _width + pos.x();
+		index = pos.y() * WIDTH + pos.x();
 		_field[index].AddFieldFlag(Protocol::FieldType::FIELD_ITEM);
+		_field[index].RemoveFieldFlag(Protocol::FieldType::FIELD_OBSTACLE);
 	}
 }
 
@@ -332,18 +333,18 @@ void Room::RegisterActors()
 
 void Room::AddFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag)
 {
-	const uint32 index = y * _width + x;
+	const uint32 index = y * WIDTH + x;
 	_field[index].AddFieldFlag(flag);
 }
 
 void Room::RemoveFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag)
 {
-	const uint32 index = y * _width + x;
-	_field[index].AddRemoveFlag(flag);
+	const uint32 index = y * WIDTH + x;
+	_field[index].RemoveFieldFlag(flag);
 }
 
 const FieldInfo& Room::GetFieldInfo(uint32 x, uint32 y) const
 {
-	const uint32 index = y * _width + x;
+	const uint32 index = y * WIDTH + x;
 	return _field[index];
 }
