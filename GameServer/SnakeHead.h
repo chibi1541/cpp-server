@@ -23,8 +23,6 @@ public:
 
 	void SetDirection(Protocol::DirectionType newDirection);
 
-	const Protocol::Vector2& GetPrevPosition() const { return _prevPos; }
-
 	float GetMoveSpeed() const { return _moveSpeed; }
 
 	void MakeHeadData(Protocol::HeadData** OUT data);
@@ -35,12 +33,16 @@ public:
 
 	DirectionType FindTrailDir(const Vector2 pos);
 
+	const deque<Protocol::TrailData>& GetTrailQueue() const {return _trailQueue; }
+
 private:
 	virtual void Tick(float deltaTime) override;
 
-	virtual void OnCollision(const ActorRef& other) override;
+	virtual void OnCollision(const Protocol::ObjectType& objectType) override;
 
 	virtual void MarkDestory() override;
+
+	virtual const vector<Vector2> GetCollisionCheckArea() override;
 
 	void Move(float detaTime);
 
@@ -62,9 +64,6 @@ private:
 
 	// 방향 전환 후에 1그리드 이상 움직여서 방향 전환이 가능한 상태를 체크
 	bool						_canTurn = false;
-	
-	// 이전 Tick의 좌표를 캐싱
-	Vector2						_prevPos;
 
 	// 몸체를 늘리는 요청 카운터, 하나는 가지고 시작함(꼬리가 없으면 볼품없음)
 	uint32						_addBodyCallCount = 1;

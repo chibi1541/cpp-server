@@ -19,12 +19,12 @@ SnakeBody::~SnakeBody()
 
 }
 
-void SnakeBody::OnCollision(const ActorRef& other)
-{
-	ObjectType objType = ObjectIdHandler::GetObjectType(other->GetObjectId());
-
-	if (objType == ObjectType::OBJECT_SNAKE_HEAD)
-	{
-		// TODO : 해당 유저 GameOver 처리
-	}
-}
+//void SnakeBody::OnCollision(const ActorRef& other)
+//{
+//	ObjectType objType = ObjectIdHandler::GetObjectType(other->GetObjectId());
+//
+//	if (objType == ObjectType::OBJECT_SNAKE_HEAD)
+//	{
+//		// TODO : 해당 유저 GameOver 처리
+//	}
+//}

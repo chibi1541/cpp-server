@@ -55,7 +55,7 @@ void Room::Leave(PlayerRef player)
 
 void Room::Broadcast(SendBufferRef sendBuffer)
 {
-	for(auto player : _players)
+	for (auto player : _players)
 	{
 		player.second->ownerSession->Send(sendBuffer);
 	}
@@ -120,10 +120,8 @@ void Room::Tick(float deltaTime)
 	uint64 elapsedTime = (_prevElapsedTime != 0) ? (GetTickCount64() - _prevElapsedTime) : 0;
 	float fElapsedTime = static_cast<float>(elapsedTime) / 1000.f;
 
-	DestoryActors();
-
-	// TODO : 액터 스폰하는 로직 수정
-	if(_players.size() > 0)
+	// TODO : 아이템 추가 로직 수정
+	if (_players.size() > 0)
 	{
 		_elapsedTime += fElapsedTime;
 		if (_spawnDelta <= _elapsedTime)
@@ -131,18 +129,20 @@ void Room::Tick(float deltaTime)
 			int32 x = RandomRange32(1, 79);
 			int32 y = RandomRange32(1, 19);
 
-			_elapsedTime = 0.f;
-			ActorRef item = ObjectPool<Item>::MakeShared(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_ITEM), x * 100, y * 100, 1);
-			AddActor(item);
+			AddFieldFlag(x, y, Protocol::FIELD_ITEM);
 
-			Protocol::S_SPAWN_ACTOR spawnPkt;
-			spawnPkt.set_id(item->GetObjectId());
-			Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
-			spawnPos->set_x(x * 100);
-			spawnPos->set_y(y * 100);
+			//_elapsedTime = 0.f;
+			//ActorRef item = ObjectPool<Item>::MakeShared(ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_ITEM), x * 100, y * 100, 1);
+			//AddActor(item);
 
-			auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
-			DoAsync(&Room::Broadcast, sendBuffer);
+			//Protocol::S_SPAWN_ACTOR spawnPkt;
+			//spawnPkt.set_id(item->GetObjectId());
+			//Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
+			//spawnPos->set_x(x * 100);
+			//spawnPos->set_y(y * 100);
+
+			//auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
+			//DoAsync(&Room::Broadcast, sendBuffer);
 		}
 
 	}
@@ -157,32 +157,41 @@ void Room::Tick(float deltaTime)
 	// 액터끼리(뱀 머리)의 충돌 판정
 	collisionSys->ProcessCollision(_actors);
 
+	// 맵 정보와 충돌 판정
+	collisionSys->ProcessFieldCheck(_actors, _field, _width, _height);
+
+	// 파괴 처리
+	DestoryActors();
+
 
 	Protocol::S_UPDATE_ROOM updatePkt;
 
 	for (ActorRef actor : _actors)
 	{
+
+
 		if (actor->GetObjecType() == ObjectType::OBJECT_SNAKE_HEAD)
 		{
 			SnakeHeadRef head = static_pointer_cast<SnakeHead>(actor);
 			Protocol::HeadData* data = updatePkt.add_heads();
 			head->MakeHeadData(&data);
 		}
-		else
-		{
-			Protocol::ActorInfo* actorInfo = updatePkt.add_actors();
-			actorInfo->set_objectid(actor->GetObjectId());
-			Protocol::Vector2* pos = new Protocol::Vector2(actor->GetPosition());
-			actorInfo->set_allocated_pos(pos);
-		}
 	}
 
-	if (updatePkt.actors_size() > 0 || updatePkt.heads_size() > 0)
+	for (uint32 index = 0; index < _width * _height; ++index)
 	{
-		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(updatePkt);
-		DoAsync(&Room::Broadcast, sendBuffer);
+		if (_field[index].IsGround())
+			continue;
+
+		Protocol::FieldData* field = updatePkt.add_fielddata();
+		field->set_fieldflag(_field[index].GetFlag());
+		Protocol::Vector2* pos = field->mutable_pos();
+		pos->set_x(index % _width);
+		pos->set_y(index / _width);
 	}
 
+	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(updatePkt);
+	DoAsync(&Room::Broadcast, sendBuffer);
 
 	_prevElapsedTime = GetTickCount64();
 
@@ -216,7 +225,7 @@ void Room::CheckCollision()
 	{
 		// TODO : 파괴 예약 처리
 
-		for (auto it = _actors.begin() ; it < _actors.end() ;)
+		for (auto it = _actors.begin(); it < _actors.end();)
 		{
 			if (false == ComparePos(head->GetPosition(), it->get()->GetPosition()))
 			{
@@ -277,12 +286,29 @@ bool Room::ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& ri
 	return lValue == rValue;
 }
 
+void Room::ProcessDestoryActor(Actor* actor)
+{
+	Vector2 pos = actor->GetPosition();
+	int32 index = pos.y() * _width + pos.x();
+	_field[index].AddFieldFlag(Protocol::FieldType::FIELD_ITEM);
+
+	SnakeHead* head = dynamic_cast<SnakeHead*>(actor);
+	auto trails = head->GetTrailQueue();
+	for (auto trail : trails)
+	{
+		pos = trail.pos();
+		index = pos.y() * _width + pos.x();
+		_field[index].AddFieldFlag(Protocol::FieldType::FIELD_ITEM);
+	}
+}
+
 void Room::DestoryActors()
 {
 	for (auto it = _actors.begin(); it < _actors.end();)
 	{
 		if (it->get()->IsActive() == false)
 		{
+			ProcessDestoryActor(it->get());
 			it = _actors.erase(it);
 			continue;
 		}

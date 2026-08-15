@@ -12,14 +12,14 @@ Item::~Item()
 {
 }
 
-void Item::OnCollision(const ActorRef& other)
-{
-	// TODO : 점수 올려주는 처리
-	
-	MarkDestory();
-
-	Protocol::S_DESTROY_ACTOR pkt;
-	pkt.set_id(objectId);
-	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
-}
+//void Item::OnCollision(const ActorRef& other)
+//{
+//	// TODO : 점수 올려주는 처리
+//	
+//	MarkDestory();
+//
+//	Protocol::S_DESTROY_ACTOR pkt;
+//	pkt.set_id(objectId);
+//	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+//	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+//}

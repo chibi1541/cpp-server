@@ -31,6 +31,12 @@ message ActorInfo
 	Vector2 pos = 2;
 }
 
+message FieldData
+{
+	Vector2 pos = 1;
+	uint32 fieldflag = 2;
+}
+
 message TrailData
 {
 	Vector2 pos = 1;

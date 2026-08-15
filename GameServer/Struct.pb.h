@@ -49,6 +49,9 @@ namespace Protocol {
 class ActorInfo;
 struct ActorInfoDefaultTypeInternal;
 extern ActorInfoDefaultTypeInternal _ActorInfo_default_instance_;
+class FieldData;
+struct FieldDataDefaultTypeInternal;
+extern FieldDataDefaultTypeInternal _FieldData_default_instance_;
 class HeadData;
 struct HeadDataDefaultTypeInternal;
 extern HeadDataDefaultTypeInternal _HeadData_default_instance_;
@@ -67,6 +70,7 @@ extern Vector2DefaultTypeInternal _Vector2_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::ActorInfo* Arena::CreateMaybeMessage<::Protocol::ActorInfo>(Arena*);
+template<> ::Protocol::FieldData* Arena::CreateMaybeMessage<::Protocol::FieldData>(Arena*);
 template<> ::Protocol::HeadData* Arena::CreateMaybeMessage<::Protocol::HeadData>(Arena*);
 template<> ::Protocol::PlayerInfo* Arena::CreateMaybeMessage<::Protocol::PlayerInfo>(Arena*);
 template<> ::Protocol::TrailData* Arena::CreateMaybeMessage<::Protocol::TrailData>(Arena*);
@@ -752,6 +756,174 @@ class ActorInfo final :
 };
 // -------------------------------------------------------------------
 
+class FieldData final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.FieldData) */ {
+ public:
+  inline FieldData() : FieldData(nullptr) {}
+  ~FieldData() override;
+  explicit PROTOBUF_CONSTEXPR FieldData(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  FieldData(const FieldData& from);
+  FieldData(FieldData&& from) noexcept
+    : FieldData() {
+    *this = ::std::move(from);
+  }
+
+  inline FieldData& operator=(const FieldData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline FieldData& operator=(FieldData&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const FieldData& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const FieldData* internal_default_instance() {
+    return reinterpret_cast<const FieldData*>(
+               &_FieldData_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(FieldData& a, FieldData& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(FieldData* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(FieldData* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  FieldData* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<FieldData>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const FieldData& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const FieldData& from) {
+    FieldData::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(FieldData* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.FieldData";
+  }
+  protected:
+  explicit FieldData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPosFieldNumber = 1,
+    kFieldflagFieldNumber = 2,
+  };
+  // .Protocol.Vector2 pos = 1;
+  bool has_pos() const;
+  private:
+  bool _internal_has_pos() const;
+  public:
+  void clear_pos();
+  const ::Protocol::Vector2& pos() const;
+  PROTOBUF_NODISCARD ::Protocol::Vector2* release_pos();
+  ::Protocol::Vector2* mutable_pos();
+  void set_allocated_pos(::Protocol::Vector2* pos);
+  private:
+  const ::Protocol::Vector2& _internal_pos() const;
+  ::Protocol::Vector2* _internal_mutable_pos();
+  public:
+  void unsafe_arena_set_allocated_pos(
+      ::Protocol::Vector2* pos);
+  ::Protocol::Vector2* unsafe_arena_release_pos();
+
+  // uint32 fieldflag = 2;
+  void clear_fieldflag();
+  uint32_t fieldflag() const;
+  void set_fieldflag(uint32_t value);
+  private:
+  uint32_t _internal_fieldflag() const;
+  void _internal_set_fieldflag(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.FieldData)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::Protocol::Vector2* pos_;
+    uint32_t fieldflag_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Struct_2eproto;
+};
+// -------------------------------------------------------------------
+
 class TrailData final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.TrailData) */ {
  public:
@@ -800,7 +972,7 @@ class TrailData final :
                &_TrailData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(TrailData& a, TrailData& b) {
     a.Swap(&b);
@@ -979,7 +1151,7 @@ class HeadData final :
                &_HeadData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(HeadData& a, HeadData& b) {
     a.Swap(&b);
@@ -1533,6 +1705,120 @@ inline void ActorInfo::set_allocated_pos(::Protocol::Vector2* pos) {
 
 // -------------------------------------------------------------------
 
+// FieldData
+
+// .Protocol.Vector2 pos = 1;
+inline bool FieldData::_internal_has_pos() const {
+  return this != internal_default_instance() && _impl_.pos_ != nullptr;
+}
+inline bool FieldData::has_pos() const {
+  return _internal_has_pos();
+}
+inline void FieldData::clear_pos() {
+  if (GetArenaForAllocation() == nullptr && _impl_.pos_ != nullptr) {
+    delete _impl_.pos_;
+  }
+  _impl_.pos_ = nullptr;
+}
+inline const ::Protocol::Vector2& FieldData::_internal_pos() const {
+  const ::Protocol::Vector2* p = _impl_.pos_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vector2&>(
+      ::Protocol::_Vector2_default_instance_);
+}
+inline const ::Protocol::Vector2& FieldData::pos() const {
+  // @@protoc_insertion_point(field_get:Protocol.FieldData.pos)
+  return _internal_pos();
+}
+inline void FieldData::unsafe_arena_set_allocated_pos(
+    ::Protocol::Vector2* pos) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.pos_);
+  }
+  _impl_.pos_ = pos;
+  if (pos) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.FieldData.pos)
+}
+inline ::Protocol::Vector2* FieldData::release_pos() {
+  
+  ::Protocol::Vector2* temp = _impl_.pos_;
+  _impl_.pos_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vector2* FieldData::unsafe_arena_release_pos() {
+  // @@protoc_insertion_point(field_release:Protocol.FieldData.pos)
+  
+  ::Protocol::Vector2* temp = _impl_.pos_;
+  _impl_.pos_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vector2* FieldData::_internal_mutable_pos() {
+  
+  if (_impl_.pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vector2>(GetArenaForAllocation());
+    _impl_.pos_ = p;
+  }
+  return _impl_.pos_;
+}
+inline ::Protocol::Vector2* FieldData::mutable_pos() {
+  ::Protocol::Vector2* _msg = _internal_mutable_pos();
+  // @@protoc_insertion_point(field_mutable:Protocol.FieldData.pos)
+  return _msg;
+}
+inline void FieldData::set_allocated_pos(::Protocol::Vector2* pos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.pos_;
+  }
+  if (pos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(pos);
+    if (message_arena != submessage_arena) {
+      pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pos, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.pos_ = pos;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.FieldData.pos)
+}
+
+// uint32 fieldflag = 2;
+inline void FieldData::clear_fieldflag() {
+  _impl_.fieldflag_ = 0u;
+}
+inline uint32_t FieldData::_internal_fieldflag() const {
+  return _impl_.fieldflag_;
+}
+inline uint32_t FieldData::fieldflag() const {
+  // @@protoc_insertion_point(field_get:Protocol.FieldData.fieldflag)
+  return _internal_fieldflag();
+}
+inline void FieldData::_internal_set_fieldflag(uint32_t value) {
+  
+  _impl_.fieldflag_ = value;
+}
+inline void FieldData::set_fieldflag(uint32_t value) {
+  _internal_set_fieldflag(value);
+  // @@protoc_insertion_point(field_set:Protocol.FieldData.fieldflag)
+}
+
+// -------------------------------------------------------------------
+
 // TrailData
 
 // .Protocol.Vector2 pos = 1;
@@ -1842,6 +2128,8 @@ HeadData::trails() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

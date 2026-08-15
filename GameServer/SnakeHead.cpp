@@ -13,13 +13,14 @@ SnakeHead::SnakeHead(PlayerRef owner)
 SnakeHead::SnakeHead(uint64 objectId, int32 x, int32 y, PlayerRef owner)
 	:Actor(objectId, x, y), _owner(owner)
 {
-	_prevPos.set_x(x);
-	_prevPos.set_y(y);
+	prevPos.set_x(x);
+	prevPos.set_y(y);
 }
 
 SnakeHead::SnakeHead(uint64 objectId, Vector2 pos, PlayerRef owner)
-	:Actor(objectId, pos), _owner(owner), _prevPos(pos)
+	:Actor(objectId, pos), _owner(owner)
 {
+	prevPos = pos;
 }
 
 SnakeHead::~SnakeHead()
@@ -240,27 +241,44 @@ void SnakeHead::Tick(float deltaTime)
 		cout << "몸통 좌표 겹침 \n";
 }
 
-void SnakeHead::OnCollision(const ActorRef& other)
+void SnakeHead::OnCollision(const Protocol::ObjectType& objectType)
 {
-	Protocol::ObjectType otherObjType = ObjectIdHandler::GetObjectType(other->GetObjectId());
-	if (otherObjType == Protocol::ObjectType::OBJECT_ITEM)
+	switch(objectType)
 	{
-		// 현재 헤드 위치에 새 바디 추가
-		++_addBodyCallCount;
+		case Protocol::ObjectType::OBJECT_SNAKE_HEAD:
+		case Protocol::ObjectType::OBJECT_ACTOR:
+			MarkDestory();
+			break;
+
+		case Protocol::ObjectType::OBJECT_ITEM:
+			++_addBodyCallCount;
+			break;
 	}
+
 }
 
 void SnakeHead::MarkDestory()
 {
 	Actor::MarkDestory();
+}
 
-	for (SnakeBodyRef body : _bodys)
+const vector<Vector2> SnakeHead::GetCollisionCheckArea()
+{
+	vector<Vector2> ret;
+	ret.emplace_back(position);
+	if(position != prevPos)
 	{
-		if (body->IsActive())
+		for(int32 index = static_cast<int32>(_trailQueue.size())- 1 ; index > 0 ; --index)
 		{
-			body->MarkDestory();
+			ret.emplace_back(_trailQueue[index].pos());
+			
+			// 큐의 마지막(머리 바로 뒤의 몸통)부터 순서대로 순회하면서 궤적을 체크 영역으로 반환
+			if(_trailQueue[index].pos() == prevPos)
+				break;
 		}
 	}
+
+	return ret;
 }
 
 void SnakeHead::Move(float detaTime)
@@ -270,7 +288,7 @@ void SnakeHead::Move(float detaTime)
 	float remainTime = detaTime;
 
 	// 이전 좌표 캐싱
-	_prevPos = position;
+	prevPos = position;
 
 	do
 	{

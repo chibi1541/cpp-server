@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "Struct.pb.h"
 #include "Utils.h"
+#include "Room.h"
 
 #define CHECK_VALUE 80
 
@@ -10,138 +11,113 @@ using namespace Protocol;
 
 void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
 {
-    // 예외 처리
-    if (actorList.empty())
-    {
-        return;
-    }
+	// 예외 처리
+	if (actorList.empty())
+	{
+		return;
+	}
 
-    // 충돌한 액터의 이벤트를 한번에 정리해 전달하기 위한 배열
-    vector<CollisionPair> collidedActorList;
+	// 충돌한 액터의 이벤트를 한번에 정리해 전달하기 위한 배열
+	vector<CollisionPair> collidedActorList;
 
-    // 레벨에 배치된 액터 수
-    const uint32 count = static_cast<uint32>(actorList.size());
+	// 레벨에 배치된 액터 수
+	const uint32 count = static_cast<uint32>(actorList.size());
 
-    // 모든 액터를 순회하면서 충돌 검사
-    for (uint32 i = 0; i < count; ++i)
-    {
-        const ActorRef& left = actorList[i];
-        if (nullptr == left || left->IsActive() == false)
-        {
-            continue;
-        }
-        
-        for (uint32 j = i + 1; j < count; ++j)
-        {
-            const ActorRef& right = actorList[j];
-            if (nullptr == right || right->IsActive() == false)
-            {
-                continue;
-            }
+	// 모든 액터를 순회하면서 충돌 검사
+	for (uint32 i = 0; i < count; ++i)
+	{
+		const ActorRef& left = actorList[i];
+		if (nullptr == left || left->IsActive() == false)
+		{
+			continue;
+		}
 
-            // 충돌 검사
-            if (Test(left, right))
-            {
-                // 이벤트 발행할 목록에 추가할 데이터 생성.
-                CollisionPair pair = {};
-                pair.actor = left;
-                pair.other = right;
+		for (uint32 j = i + 1; j < count; ++j)
+		{
+			const ActorRef& right = actorList[j];
+			if (nullptr == right || right->IsActive() == false)
+			{
+				continue;
+			}
 
-                // 목록에 추가
-                collidedActorList.emplace_back(pair);
-            }
-        }
-    }
+			// 충돌 검사
+			if (Test(left, right))
+			{
+				// 이벤트 발행할 목록에 추가할 데이터 생성.
+				CollisionPair pair = {};
+				pair.actor = left;
+				pair.other = right;
 
-    // 충돌 발생한 액터 목록 확인. 충돌한 액터가 없으면 함수 종료.
-    if (collidedActorList.empty())
-    {
-        return;
-    }
+				// 목록에 추가
+				collidedActorList.emplace_back(pair);
+			}
+		}
+	}
 
-    // 충돌한 액터에 이벤트 전달
-    for (const CollisionPair& pair : collidedActorList)
-    {
-        // 이미 삭제되거나 비활성화 된 액터는 제외
-        if (!pair.actor->IsActive() || !pair.other->IsActive())
-        {
-            continue;
-        }
+	// 충돌 발생한 액터 목록 확인. 충돌한 액터가 없으면 함수 종료.
+	if (collidedActorList.empty())
+	{
+		return;
+	}
 
-        // 충돌 이벤트 전달
-        pair.actor->OnCollision(pair.other);
-        pair.other->OnCollision(pair.actor);
-    }
+	// 충돌한 액터에 이벤트 전달
+	for (const CollisionPair& pair : collidedActorList)
+	{
+		// 이미 삭제되거나 비활성화 된 액터는 제외
+		if (!pair.actor->IsActive() || !pair.other->IsActive())
+		{
+			continue;
+		}
+
+		// 충돌 이벤트 전달
+		pair.actor->OnCollision(ObjectType::OBJECT_SNAKE_HEAD);
+		pair.other->OnCollision(ObjectType::OBJECT_SNAKE_HEAD);
+	}
 }
 
 void CollisionSystem::ProcessFieldCheck(const vector<ActorRef>& actorList, const FieldInfo* field, uint32 width, uint32 height)
 {
 	ASSERT_CRASH(field != nullptr);
 
-	for(const ActorRef& actor : actorList)
-	{
-		
-	}
 
+	for (const ActorRef& actor : actorList)
+	{
+		const vector<Vector2>& checkList = actor->GetCollisionCheckArea();
+		for(const Vector2& pos : checkList)
+		{
+			uint32 index = (width * pos.y()) + pos.x();
+
+			if (field[index].CheckFlag(Protocol::FieldType::FIELD_ITEM))
+			{
+				actor->OnCollision(ObjectType::OBJECT_ITEM);
+			}
+
+			if (field[index].CheckFlag(Protocol::FieldType::FIELD_OBSTACLE))
+			{
+				actor->OnCollision(ObjectType::OBJECT_ACTOR);
+			}
+		}
+	}
 }
 
 bool CollisionSystem::Test(const ActorRef& left, const ActorRef& right)
 {
-    if (nullptr == left || nullptr == right)
-    {
-        return false;
-    }
+	if (nullptr == left || nullptr == right)
+	{
+		return false;
+	}
 
-    // AABB (Axis Aligned Bounding Box)
-    // 이번 프로젝트는 액터가 1문자이기 때문에 box check는 필요 없음
+	const vector<Vector2>& leftCheckList = left->GetCollisionCheckArea();
+	const vector<Vector2>& rightCheckList = right->GetCollisionCheckArea();
 
-    //TODO : 보정 값에 방향치 추가
+	for(const Vector2& leftPos : leftCheckList)
+	{
+		for(const Vector2 rightPos : rightCheckList)
+		{
+			if(leftPos == rightPos)
+				return true;
+		}
+	}
 
-    // left의 위치보정
-    const Vector2 leftRawPos = left->GetPosition();
-    const int32 leftX = ((leftRawPos.x() % 100) >= CHECK_VALUE) ? (leftRawPos.x() / 100) + 1 : (leftRawPos.x() / 100);
-    const int32 leftY = ((leftRawPos.y() % 100) >= CHECK_VALUE) ? (leftRawPos.y() / 100) + 1 : (leftRawPos.y() / 100);
-    Vector2 upperLeftPos = Utils::MakeVector(leftX, leftY);
-    Vector2 curLeftPos = Utils::MakeVector(leftRawPos.x()/100, leftRawPos.y() / 100);
-
-    // right의 위치보정
-    const Vector2 rightRawPos = right->GetPosition();
-    const int32 rightX = ((rightRawPos.x() % 100) >= CHECK_VALUE) ? (rightRawPos.x() / 100) + 1 : (rightRawPos.x() / 100);
-    const int32 rightY = ((rightRawPos.y() % 100) >= CHECK_VALUE) ? (rightRawPos.y() / 100) + 1 : (rightRawPos.y() / 100);
-    Vector2 upperRightPos = Utils::MakeVector(rightX, rightY);
-    Vector2 curRightPos = Utils::MakeVector(rightRawPos.x() / 100, rightRawPos.y() / 100);
-
-    const int leftXMin = (upperLeftPos.x() < curLeftPos.x()) ? upperLeftPos.x() : curLeftPos.x();
-    const int leftXMax = (upperLeftPos.x() > curLeftPos.x()) ? upperLeftPos.x() : curLeftPos.x();
-
-    const int rightXMin = (upperRightPos.x() < curRightPos.x()) ? upperRightPos.x() : curRightPos.x();
-    const int rightXMax = (upperRightPos.x() > curRightPos.x()) ? upperRightPos.x() : curRightPos.x();
-
-    if (rightXMin > leftXMax)
-    {
-        return false;
-    }
-
-    if (rightXMax < leftXMin)
-    {
-        return false;
-    }
-
-    const int leftYMin = (upperLeftPos.y() < curLeftPos.y()) ? upperLeftPos.y() : curLeftPos.y();
-    const int leftYMax = (upperLeftPos.y() > curLeftPos.y()) ? upperLeftPos.y() : curLeftPos.y();
-
-    const int rightYMin = (upperRightPos.y() < curRightPos.y()) ? upperRightPos.y() : curRightPos.y();
-    const int rightYMax = (upperRightPos.y() > curRightPos.y()) ? upperRightPos.y() : curRightPos.y();
-
-    if (rightYMin > leftYMax)
-    {
-        return false;
-    }
-
-    if (rightYMax < leftYMin)
-    {
-        return false;
-    }
-
-    return true;
+	return true;
 }

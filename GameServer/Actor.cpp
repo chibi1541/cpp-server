@@ -33,11 +33,16 @@ void Actor::MarkDestory()
 	isExpired = true;
 }
 
-void Actor::OnCollision(const ActorRef& other)
+void Actor::OnCollision(const Protocol::ObjectType& objectType)
 {
 }
 
 ObjectType Actor::GetObjecType() const
 {
 	return ObjectIdHandler::GetObjectType(objectId);
+}
+
+const vector<Vector2> Actor::GetCollisionCheckArea()
+{
+	return vector<Vector2>();
 }

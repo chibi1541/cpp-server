@@ -12,7 +12,7 @@ public:
 private:
 	//virtual void Tick(float deltaTime) override;
 
-	virtual void OnCollision(const ActorRef& other) override;
+	//virtual void OnCollision(const ActorRef& other) override;
 
 private:
 

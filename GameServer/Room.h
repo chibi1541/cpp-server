@@ -14,15 +14,17 @@ public:
 		fieldFlag = fieldFlag & ~flag;
 	}
 
-	bool CheckFlag(const Protocol::FieldType& flag)
+	bool CheckFlag(const Protocol::FieldType& flag) const
 	{
 		return fieldFlag & flag;
 	}
 
-	bool IsGround()
+	bool IsGround() const
 	{
 		return fieldFlag == Protocol::FieldType::FIELD_GROUND;
 	}
+
+	uint32 GetFlag() const {return fieldFlag;}
 
 private:
 	uint32 fieldFlag = Protocol::FieldType::FIELD_GROUND;
@@ -56,6 +58,8 @@ public:
 	void CheckCollision();
 
 	bool ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& right);
+
+	void ProcessDestoryActor(Actor* actor);
 
 	void DestoryActors();
 
