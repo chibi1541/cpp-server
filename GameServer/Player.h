@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "Enum.pb.h"
 
 class Player
 {

@@ -106,7 +106,8 @@ inline bool DirectionType_Parse(
 }
 enum FieldType : int {
   FIELD_GROUND = 0,
-  FIELD_OBSTACLE = 1,
+  FIELD_ITEM = 1,
+  FIELD_OBSTACLE = 2,
   FieldType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   FieldType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };

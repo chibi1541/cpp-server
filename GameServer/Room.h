@@ -1,17 +1,35 @@
 ﻿#pragma once
 #include "JobQueue.h"
-#include "SnakeHead.h"
 
+class FieldInfo
+{
+public:
+	void AddFieldFlag(const Protocol::FieldType& flag)
+	{
+		fieldFlag = fieldFlag | flag;
+	}
 
+	void AddRemoveFlag(const Protocol::FieldType& flag)
+	{
+		fieldFlag = fieldFlag & ~flag;
+	}
+
+	bool CheckFlag(const Protocol::FieldType& flag)
+	{
+		return fieldFlag & flag;
+	}
+
+	bool IsGround()
+	{
+		return fieldFlag == Protocol::FieldType::FIELD_GROUND;
+	}
+
+private:
+	uint32 fieldFlag = Protocol::FieldType::FIELD_GROUND;
+};
 
 class Room : public JobQueue
 {
-	class FieldInfo
-	{
-	public:
-		FieldType fieldType = FieldType::FIELD_GROUND;
-	};
-
 	enum { WIDTH = 80, HEIGHT = 30 };
 
 public:
@@ -45,6 +63,11 @@ public:
 
 	uint32 GetFieldWidth() const { return WIDTH; }
 	uint32 GetFieldHeight() const { return HEIGHT; }
+
+	void AddFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag);
+	void RemoveFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag);
+	const FieldInfo* GetField() const { return _field; }
+	const FieldInfo& GetFieldInfo(uint32 x, uint32 y) const;
 
 private:
 	USE_LOCK;

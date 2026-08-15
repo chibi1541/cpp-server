@@ -12,7 +12,6 @@
 #pragma comment(lib, "Protobuf\\Release\\libprotobuf.lib")
 #endif
 
-
 #include "CorePch.h"
 #include "Enum.pb.h"
 #include "Struct.pb.h"
@@ -33,7 +32,3 @@ inline bool operator!=(const Protocol::Vector2& left, const Protocol::Vector2& r
 {
 	return !(left == right);
 }
-
-// TODO : 게임 규칙에 옮김
-// 플레이어 방향 전환 시에 이전 좌표에서 올림 처리하는 값 기준
-const int32 CHECK_VALUE = 80;

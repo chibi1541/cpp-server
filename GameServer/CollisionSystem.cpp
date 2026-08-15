@@ -4,6 +4,8 @@
 #include "Struct.pb.h"
 #include "Utils.h"
 
+#define CHECK_VALUE 80
+
 using namespace Protocol;
 
 void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
@@ -70,6 +72,17 @@ void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
         pair.actor->OnCollision(pair.other);
         pair.other->OnCollision(pair.actor);
     }
+}
+
+void CollisionSystem::ProcessFieldCheck(const vector<ActorRef>& actorList, const FieldInfo* field, uint32 width, uint32 height)
+{
+	ASSERT_CRASH(field != nullptr);
+
+	for(const ActorRef& actor : actorList)
+	{
+		
+	}
+
 }
 
 bool CollisionSystem::Test(const ActorRef& left, const ActorRef& right)

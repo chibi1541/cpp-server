@@ -70,3 +70,8 @@ Testing/
 
 #visual studio
 .vs/
+
+# Exception Files
+!protoc.exe
+!GenPackets.exe
+!GenProcs.exe

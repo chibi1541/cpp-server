@@ -26,5 +26,6 @@ enum DirectionType
 enum FieldType
 {
 	FIELD_GROUND = 0;
-	FIELD_OBSTACLE = 1; 
+	FIELD_ITEM = 1;
+	FIELD_OBSTACLE = 2; 
 }

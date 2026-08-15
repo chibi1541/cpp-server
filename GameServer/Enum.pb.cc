@@ -34,13 +34,13 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "T_SNAKE_HEAD\020\002\022\025\n\021OBJECT_SNAKE_BODY\020\003\022\017\n"
   "\013OBJECT_ITEM\020\004\022\017\n\013OBJECT_WALL\020\005*T\n\rDirec"
   "tionType\022\014\n\010DIR_NONE\020\000\022\014\n\010DIR_LEFT\020\001\022\r\n\t"
-  "DIR_RIGHT\020\002\022\n\n\006DIR_UP\020\003\022\014\n\010DIR_DOWN\020\004*1\n"
-  "\tFieldType\022\020\n\014FIELD_GROUND\020\000\022\022\n\016FIELD_OB"
-  "STACLE\020\001b\006proto3"
+  "DIR_RIGHT\020\002\022\n\n\006DIR_UP\020\003\022\014\n\010DIR_DOWN\020\004*A\n"
+  "\tFieldType\022\020\n\014FIELD_GROUND\020\000\022\016\n\nFIELD_IT"
+  "EM\020\001\022\022\n\016FIELD_OBSTACLE\020\002b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 296, descriptor_table_protodef_Enum_2eproto,
+    false, false, 312, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -97,6 +97,7 @@ bool FieldType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;

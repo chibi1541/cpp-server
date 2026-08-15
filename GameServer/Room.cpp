@@ -1,12 +1,14 @@
 ﻿#include "pch.h"
 #include "Room.h"
 #include "Player.h"
-#include "GameSession.h"
 #include "ClientPacketHandler.h"
 #include "ObjectIdHandler.h"
 #include "Item.h"
 #include "CollisionSystem.h"
 #include "Actor.h"
+#include "SnakeHead.h"
+#include "GameSession.h"
+
 
 shared_ptr<Room> GRoom = make_shared<Room>();
 
@@ -24,11 +26,11 @@ Room::Room()
 	{
 		// 왼쪽 오른쪽 테두리
 		if ((idx % WIDTH) == 0 || (idx % WIDTH) == WIDTH - 1)
-			_field[idx].fieldType = FieldType::FIELD_OBSTACLE;
+			_field[idx].AddFieldFlag(FieldType::FIELD_OBSTACLE);
 
 		// 위 아래 테두리
 		if ((idx / WIDTH) == 0 || (idx / WIDTH) == HEIGHT - 1)
-			_field[idx].fieldType = FieldType::FIELD_OBSTACLE;
+			_field[idx].AddFieldFlag(FieldType::FIELD_OBSTACLE);
 	}
 }
 
@@ -53,9 +55,9 @@ void Room::Leave(PlayerRef player)
 
 void Room::Broadcast(SendBufferRef sendBuffer)
 {
-	for(auto p : _players)
+	for(auto player : _players)
 	{
-		p.second->ownerSession->Send(sendBuffer);
+		player.second->ownerSession->Send(sendBuffer);
 	}
 }
 
@@ -152,7 +154,9 @@ void Room::Tick(float deltaTime)
 		actor->Tick(fElapsedTime);
 	}
 
+	// 액터끼리(뱀 머리)의 충돌 판정
 	collisionSys->ProcessCollision(_actors);
+
 
 	Protocol::S_UPDATE_ROOM updatePkt;
 
@@ -298,4 +302,22 @@ void Room::RegisterActors()
 	}
 
 	_addRequestedActorList.clear();
+}
+
+void Room::AddFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag)
+{
+	const uint32 index = y * _width + x;
+	_field[index].AddFieldFlag(flag);
+}
+
+void Room::RemoveFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag)
+{
+	const uint32 index = y * _width + x;
+	_field[index].AddRemoveFlag(flag);
+}
+
+const FieldInfo& Room::GetFieldInfo(uint32 x, uint32 y) const
+{
+	const uint32 index = y * _width + x;
+	return _field[index];
 }

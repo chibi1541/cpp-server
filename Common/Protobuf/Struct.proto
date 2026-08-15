@@ -18,20 +18,6 @@ message Vector2
 	int32 y = 2;
 }
 
-message ActorInfo
-{
-	uint64 objectId = 1;
-	Vector2 pos = 2;
-}
-
-message HeadData
-{
-	ActorInfo actor = 1;
-	float moveSpeed = 2;
-	DirectionType dir = 3;
-	repeated Vector2 trails = 4;
-}
-
 message PlayerInfo
 {
 	uint64 id = 1;
@@ -39,3 +25,23 @@ message PlayerInfo
 	HeadData head = 3;
 }
 
+message ActorInfo
+{
+	uint64 objectId = 1;
+	Vector2 pos = 2;
+}
+
+message TrailData
+{
+	Vector2 pos = 1;
+	DirectionType prevdir = 2;
+	DirectionType curdir = 3;
+}
+
+message HeadData
+{
+	ActorInfo actor = 1;
+	float moveSpeed = 2;
+	DirectionType dir = 3;
+	repeated TrailData trails = 4;
+}
