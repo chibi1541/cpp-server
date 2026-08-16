@@ -35,6 +35,11 @@ message S_SPAWN_ACTOR
 	Vector2 spawnPos = 2;
 }
 
+message S_SPAWN_PLAYER
+{
+	PlayerInfo player = 1;
+}
+
 message C_MOVE_ACTOR
 {
 	DirectionType newdir = 1; 

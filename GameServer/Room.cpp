@@ -164,7 +164,7 @@ void Room::Tick(float deltaTime)
 
 	for (SnakeHeadRef head : _heads)
 	{
-		updatePkt.mutable_heads()->Reserve(_heads.size());
+		updatePkt.mutable_heads()->Reserve(static_cast<int32>(_heads.size()));
 		Protocol::HeadData* data = updatePkt.add_heads();
 		head->MakeHeadData(&data);
 	}
