@@ -526,8 +526,9 @@ class PlayerInfo final :
 
   enum : int {
     kNameFieldNumber = 2,
-    kHeadFieldNumber = 3,
+    kHeadFieldNumber = 4,
     kIdFieldNumber = 1,
+    kScoreFieldNumber = 3,
   };
   // string name = 2;
   void clear_name();
@@ -543,7 +544,7 @@ class PlayerInfo final :
   std::string* _internal_mutable_name();
   public:
 
-  // .Protocol.HeadData head = 3;
+  // .Protocol.HeadData head = 4;
   bool has_head() const;
   private:
   bool _internal_has_head() const;
@@ -570,6 +571,15 @@ class PlayerInfo final :
   void _internal_set_id(uint64_t value);
   public:
 
+  // uint32 score = 3;
+  void clear_score();
+  uint32_t score() const;
+  void set_score(uint32_t value);
+  private:
+  uint32_t _internal_score() const;
+  void _internal_set_score(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.PlayerInfo)
  private:
   class _Internal;
@@ -581,6 +591,7 @@ class PlayerInfo final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
     ::Protocol::HeadData* head_;
     uint64_t id_;
+    uint32_t score_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1499,7 +1510,27 @@ inline void PlayerInfo::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.PlayerInfo.name)
 }
 
-// .Protocol.HeadData head = 3;
+// uint32 score = 3;
+inline void PlayerInfo::clear_score() {
+  _impl_.score_ = 0u;
+}
+inline uint32_t PlayerInfo::_internal_score() const {
+  return _impl_.score_;
+}
+inline uint32_t PlayerInfo::score() const {
+  // @@protoc_insertion_point(field_get:Protocol.PlayerInfo.score)
+  return _internal_score();
+}
+inline void PlayerInfo::_internal_set_score(uint32_t value) {
+  
+  _impl_.score_ = value;
+}
+inline void PlayerInfo::set_score(uint32_t value) {
+  _internal_set_score(value);
+  // @@protoc_insertion_point(field_set:Protocol.PlayerInfo.score)
+}
+
+// .Protocol.HeadData head = 4;
 inline bool PlayerInfo::_internal_has_head() const {
   return this != internal_default_instance() && _impl_.head_ != nullptr;
 }

@@ -50,13 +50,12 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 {
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
-	// TODO : Validation
-
 	gameSession->_room = GRoom;
 
 	int x = GRoom->GetFieldWidth()/2;
 	int y = GRoom->GetFieldHeight()/2;
 
+	// TODO : spawn 좌표 변경
 	SnakeHeadRef snakeActor = MakeShared<SnakeHead>(
 		ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_HEAD), x * 100, y* 100, gameSession->_player);
 	gameSession->_player->headActor = snakeActor;
@@ -70,36 +69,44 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		enterGamePkt.set_width(GRoom->GetFieldWidth());
 		enterGamePkt.set_height(GRoom->GetFieldHeight());
 
-		Protocol::PlayerInfo* playerInfo = new Protocol::PlayerInfo();
+		Protocol::PlayerInfo* playerInfo = enterGamePkt.add_players();
 		playerInfo->set_id(gameSession->_player->playerId);
-		Protocol::HeadData* headData = new Protocol::HeadData();
+		playerInfo->set_name(gameSession->_player->name);
+		playerInfo->set_score(gameSession->_player->score);
 
-		Protocol::ActorInfo* actorInfo = new Protocol::ActorInfo();
-		actorInfo->set_objectid(snakeActor->GetObjectId());
-		Protocol::Vector2* pos = new Protocol::Vector2(snakeActor->GetPosition());
-		actorInfo->set_allocated_pos(pos);
+		Protocol::HeadData* headData = playerInfo->mutable_head();
+		snakeActor->MakeHeadData(&headData);
 
-		headData->set_allocated_actor(actorInfo);
-		headData->set_movespeed(snakeActor->GetMoveSpeed());
-		headData->set_dir(snakeActor->GetDirection());
+		const vector<PlayerRef>& players = GRoom->GetPlayersLocked();
+		for(const PlayerRef& player : players)
+		{
+			if(player->playerId == gameSession->_player->playerId)
+				continue;
+			
+			Protocol::PlayerInfo* playerInfo = enterGamePkt.add_players();
+			playerInfo->set_id(player->playerId);
+			playerInfo->set_name(player->name);
+			playerInfo->set_score(player->score);
+			Protocol::HeadData* headData = playerInfo->mutable_head();
+			player->headActor->MakeHeadData(&headData);
 
-		playerInfo->set_allocated_head(headData);
-		enterGamePkt.set_allocated_player(playerInfo);
+		}
 
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
 		gameSession->_player->ownerSession->Send(sendBuffer);
+
 	}
 
-	{
-		Protocol::S_SPAWN_ACTOR spawnPkt;
-		spawnPkt.set_id(gameSession->_player.get()->headActor->GetObjectId());
-		Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
-		spawnPos->set_x(x * 100);
-		spawnPos->set_y(y * 100);
+	//{
+	//	Protocol::S_SPAWN_ACTOR spawnPkt;
+	//	spawnPkt.set_id(gameSession->_player.get()->headActor->GetObjectId());
+	//	Protocol::Vector2* spawnPos = spawnPkt.mutable_spawnpos();
+	//	spawnPos->set_x(x * 100);
+	//	spawnPos->set_y(y * 100);
 
-		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
-		GRoom->DoAsync(&Room::Broadcast, sendBuffer);
-	}
+	//	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
+	//	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+	//}
 
 	return true;
 }

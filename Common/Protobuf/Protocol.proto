@@ -7,13 +7,13 @@ import "Struct.proto";
 
 message C_LOGIN
 {
-		
+	string name = 1;
 }
 
 message S_LOGIN
 {
 	bool success = 1;
-	User user = 2; // 아이디 발급 전
+	User user = 2;
 }
 
 message C_ENTER_GAME
@@ -26,7 +26,7 @@ message S_ENTER_GAME
 	bool success = 1;
 	uint32 width = 2;
 	uint32 height = 3;
-	PlayerInfo player = 4;
+	repeated PlayerInfo players = 4;
 }
 
 message S_SPAWN_ACTOR

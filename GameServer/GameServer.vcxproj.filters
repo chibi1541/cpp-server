@@ -139,14 +139,14 @@
     <None Include="..\Common\Protobuf\Enum.proto">
       <Filter>Protocol</Filter>
     </None>
-    <None Include="..\Common\Protobuf\Protocol.proto">
-      <Filter>Protocol</Filter>
-    </None>
     <None Include="..\Common\Protobuf\Struct.proto">
       <Filter>Protocol</Filter>
     </None>
     <None Include="..\Common\Procedures\GenProcs.bat">
       <Filter>DB</Filter>
+    </None>
+    <None Include="..\Common\Protobuf\Protocol.proto">
+      <Filter>Protocol</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

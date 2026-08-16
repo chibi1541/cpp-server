@@ -162,14 +162,11 @@ void Room::Tick(float deltaTime)
 
 	Protocol::S_UPDATE_ROOM updatePkt;
 
-	for (ActorRef actor : _actors)
+	for (SnakeHeadRef head : _heads)
 	{
-		if (actor->GetObjecType() == ObjectType::OBJECT_SNAKE_HEAD)
-		{
-			SnakeHeadRef head = static_pointer_cast<SnakeHead>(actor);
-			Protocol::HeadData* data = updatePkt.add_heads();
-			head->MakeHeadData(&data);
-		}
+		updatePkt.mutable_heads()->Reserve(_heads.size());
+		Protocol::HeadData* data = updatePkt.add_heads();
+		head->MakeHeadData(&data);
 	}
 
 	for (uint32 index = 0; index < WIDTH * HEIGHT; ++index)

@@ -85,6 +85,12 @@ void CollisionSystem::ProcessFieldCheck(const vector<ActorRef>& actorList, const
 				actor->OnCollision(ObjectType::OBJECT_ITEM);
 				GRoom->RemoveFieldFlag(pos.x(), pos.y(), FieldType::FIELD_ITEM);
 			}
+
+			// 벽과 충돌
+			if (field[index].CheckFlag(Protocol::FieldType::FIELD_OBSTACLE))
+			{
+				actor->OnCollision(ObjectType::OBJECT_WALL);
+			}
 		}
 	}
 }

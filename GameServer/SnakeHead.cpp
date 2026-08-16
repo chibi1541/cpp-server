@@ -50,11 +50,14 @@ void SnakeHead::MakeHeadData(Protocol::HeadData** OUT data)
 {
 	ActorInfo* actor = (*data)->mutable_actor();
 	actor->set_objectid(objectId);
-	actor->set_allocated_pos(new Vector2(position));
+	Vector2* pos = actor->mutable_pos();
+	pos->set_x(position.x());
+	pos->set_y(position.y());
 
 	(*data)->set_movespeed(_moveSpeed);
 	(*data)->set_dir(_direction);
 
+	(*data)->mutable_trails()->Reserve(static_cast<int32>(_trailQueue.size()));
 	for (const TrailData& trail : _trailQueue)
 	{
 		TrailData* newTrail = (*data)->add_trails();
@@ -158,92 +161,7 @@ bool SnakeHead::SelfCheck() const
 
 void SnakeHead::Tick(float deltaTime)
 {
-	// Actor::Tick(deltaTime);
-
 	Move(deltaTime);
-
-	//ASSERT_CRASH(_direction != Protocol::DirectionType::DIR_NONE);
-
-	//int32 direction = static_cast<int32>(_direction);
-
-	//// 이전 좌표 캐싱
-	//_prevPos = position;
-
-	//// y축 = 1, x축 = 0
-	//// TODO : 이동 로직 정리
-	//int32 axisType = direction / 3;
-	//int32 valueType = (direction % 2 == 0) ? 1 : -1;
-
-	//int32 xPos = position.x();
-	//int32 yPos = position.y();
-
-	//if (axisType == 0)
-	//{
-	//	xPos += (valueType * _moveSpeed * deltaTime) * 100;
-	//}
-	//else
-	//{
-	//	// TODO : 속도 및 좌표 보정치(0.66f, 100 ...) 매직 넘버화
-	//	yPos += (valueType * (_moveSpeed * /* y축 이동이 체감상 너무 빨리서 속도 보정*/0.66f) * deltaTime) * 100;
-	//}
-
-	//position.set_x(xPos);
-	//position.set_y(yPos);
-	//
-	//// 격자 간의 이동이 발생했는지 체크
-	//Vector2 curPos;
-	//curPos.set_x(xPos / 100);
-	//curPos.set_y(yPos / 100);
-
-	//Vector2 prevPos;
-	//prevPos.set_x(_prevPos.x() / 100);
-	//prevPos.set_y(_prevPos.y() / 100);
-
-	//if (prevPos != curPos)
-	//{
-	//	int32 xDelta = curPos.x() - prevPos.x();
-	//	int32 yDelta = curPos.y() - prevPos.y();
-
-	//	// 좌표 값 사이의 부호 방향이 나옴
-	//	int32 xValue = (xDelta != 0) ? (xDelta / ::abs(xDelta)) : 0;
-	//	int32 yValue = (yDelta != 0) ? (yDelta / ::abs(yDelta)) : 0;
-
-	//	// 2칸 이상 움직인 경우 1 이상의 값이 나옴
-	//	int32 xCount = ::abs(xDelta) - 1;
-	//	int32 yCount = ::abs(yDelta) - 1;
-
-	//	// 이동 궤적 추가
-	//	AddTrail(prevPos);
-
-	//	// 2칸 이상 이동 시의 추가적인 이동 궤적 추가
-	//	while (xCount > 0)
-	//	{
-	//		prevPos.set_x(prevPos.x() + xValue);
-	//		Vector2 trail = prevPos;
-	//		
-	//		AddTrail(trail);
-	//		--xCount;
-	//	}
-
-	//	while (yCount > 0)
-	//	{
-	//		prevPos.set_y(prevPos.y() + yValue);
-	//		Vector2 trail = prevPos;
-
-	//		AddTrail(trail);
-	//		--yCount;
-	//	}
-
-	//	// TODO : 방향 전환 타이밍 수정, 2칸 이상을 움직인 경우에 사이 사이 방향 전환이 필요한 지를 파악해야 함
-	//	// input queue에 방향 전환을 해야하는 경우 방향을 전환
-	//	if(_inputQueue.empty() == false)
-	//	{ 
-	//		DirectionType newDir = _inputQueue.front();
-	//		_inputQueue.pop();
-
-	//		SetDirection(newDir);
-	//	}
-	//}
 
 	if (WarningTrailPos())
 		cout << "몸통 좌표 겹침 \n";
@@ -255,6 +173,7 @@ void SnakeHead::OnCollision(const Protocol::ObjectType& objectType)
 	{
 		case Protocol::ObjectType::OBJECT_SNAKE_HEAD:
 		case Protocol::ObjectType::OBJECT_SNAKE_BODY:
+		case Protocol::ObjectType::OBJECT_WALL:
 			MarkDestory();
 			break;
 
