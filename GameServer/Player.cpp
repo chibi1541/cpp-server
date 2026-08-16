@@ -14,3 +14,8 @@ void Player::ReleaseControlActor()
 
 	headActor = nullptr;
 }
+
+void Player::AddScore()
+{
+	++score;
+}

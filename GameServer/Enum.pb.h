@@ -130,6 +130,35 @@ inline bool FieldType_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FieldType>(
     FieldType_descriptor(), name, value);
 }
+enum PlayerColor : int {
+  COLOR_WHITE = 0,
+  COLOR_GREEN = 1,
+  COLOR_RED = 2,
+  COLOR_BLUE = 3,
+  COLOR_CYAN = 4,
+  COLOR_PURPLE = 5,
+  PlayerColor_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  PlayerColor_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool PlayerColor_IsValid(int value);
+constexpr PlayerColor PlayerColor_MIN = COLOR_WHITE;
+constexpr PlayerColor PlayerColor_MAX = COLOR_PURPLE;
+constexpr int PlayerColor_ARRAYSIZE = PlayerColor_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerColor_descriptor();
+template<typename T>
+inline const std::string& PlayerColor_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, PlayerColor>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function PlayerColor_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    PlayerColor_descriptor(), enum_t_value);
+}
+inline bool PlayerColor_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, PlayerColor* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<PlayerColor>(
+    PlayerColor_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -166,6 +195,11 @@ template <> struct is_proto_enum< ::Protocol::FieldType> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::FieldType>() {
   return ::Protocol::FieldType_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::PlayerColor> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::PlayerColor>() {
+  return ::Protocol::PlayerColor_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

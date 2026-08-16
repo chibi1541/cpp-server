@@ -204,6 +204,7 @@ class User final :
   enum : int {
     kNameFieldNumber = 2,
     kIdFieldNumber = 1,
+    kColorFieldNumber = 3,
   };
   // string name = 2;
   void clear_name();
@@ -228,6 +229,15 @@ class User final :
   void _internal_set_id(uint64_t value);
   public:
 
+  // .Protocol.PlayerColor color = 3;
+  void clear_color();
+  ::Protocol::PlayerColor color() const;
+  void set_color(::Protocol::PlayerColor value);
+  private:
+  ::Protocol::PlayerColor _internal_color() const;
+  void _internal_set_color(::Protocol::PlayerColor value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.User)
  private:
   class _Internal;
@@ -238,6 +248,7 @@ class User final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
     uint64_t id_;
+    int color_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -526,10 +537,11 @@ class PlayerInfo final :
 
   enum : int {
     kNameFieldNumber = 2,
-    kHeadFieldNumber = 4,
+    kHeadFieldNumber = 5,
     kIdFieldNumber = 1,
     kScoreFieldNumber = 3,
-    kIsgameoverFieldNumber = 5,
+    kColorFieldNumber = 4,
+    kIsgameoverFieldNumber = 6,
   };
   // string name = 2;
   void clear_name();
@@ -545,7 +557,7 @@ class PlayerInfo final :
   std::string* _internal_mutable_name();
   public:
 
-  // .Protocol.HeadData head = 4;
+  // .Protocol.HeadData head = 5;
   bool has_head() const;
   private:
   bool _internal_has_head() const;
@@ -581,7 +593,16 @@ class PlayerInfo final :
   void _internal_set_score(uint32_t value);
   public:
 
-  // bool isgameover = 5;
+  // .Protocol.PlayerColor color = 4;
+  void clear_color();
+  ::Protocol::PlayerColor color() const;
+  void set_color(::Protocol::PlayerColor value);
+  private:
+  ::Protocol::PlayerColor _internal_color() const;
+  void _internal_set_color(::Protocol::PlayerColor value);
+  public:
+
+  // bool isgameover = 6;
   void clear_isgameover();
   bool isgameover() const;
   void set_isgameover(bool value);
@@ -602,6 +623,7 @@ class PlayerInfo final :
     ::Protocol::HeadData* head_;
     uint64_t id_;
     uint32_t score_;
+    int color_;
     bool isgameover_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1403,6 +1425,26 @@ inline void User::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.User.name)
 }
 
+// .Protocol.PlayerColor color = 3;
+inline void User::clear_color() {
+  _impl_.color_ = 0;
+}
+inline ::Protocol::PlayerColor User::_internal_color() const {
+  return static_cast< ::Protocol::PlayerColor >(_impl_.color_);
+}
+inline ::Protocol::PlayerColor User::color() const {
+  // @@protoc_insertion_point(field_get:Protocol.User.color)
+  return _internal_color();
+}
+inline void User::_internal_set_color(::Protocol::PlayerColor value) {
+  
+  _impl_.color_ = value;
+}
+inline void User::set_color(::Protocol::PlayerColor value) {
+  _internal_set_color(value);
+  // @@protoc_insertion_point(field_set:Protocol.User.color)
+}
+
 // -------------------------------------------------------------------
 
 // Vector2
@@ -1541,7 +1583,27 @@ inline void PlayerInfo::set_score(uint32_t value) {
   // @@protoc_insertion_point(field_set:Protocol.PlayerInfo.score)
 }
 
-// .Protocol.HeadData head = 4;
+// .Protocol.PlayerColor color = 4;
+inline void PlayerInfo::clear_color() {
+  _impl_.color_ = 0;
+}
+inline ::Protocol::PlayerColor PlayerInfo::_internal_color() const {
+  return static_cast< ::Protocol::PlayerColor >(_impl_.color_);
+}
+inline ::Protocol::PlayerColor PlayerInfo::color() const {
+  // @@protoc_insertion_point(field_get:Protocol.PlayerInfo.color)
+  return _internal_color();
+}
+inline void PlayerInfo::_internal_set_color(::Protocol::PlayerColor value) {
+  
+  _impl_.color_ = value;
+}
+inline void PlayerInfo::set_color(::Protocol::PlayerColor value) {
+  _internal_set_color(value);
+  // @@protoc_insertion_point(field_set:Protocol.PlayerInfo.color)
+}
+
+// .Protocol.HeadData head = 5;
 inline bool PlayerInfo::_internal_has_head() const {
   return this != internal_default_instance() && _impl_.head_ != nullptr;
 }
@@ -1631,7 +1693,7 @@ inline void PlayerInfo::set_allocated_head(::Protocol::HeadData* head) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.PlayerInfo.head)
 }
 
-// bool isgameover = 5;
+// bool isgameover = 6;
 inline void PlayerInfo::clear_isgameover() {
   _impl_.isgameover_ = false;
 }

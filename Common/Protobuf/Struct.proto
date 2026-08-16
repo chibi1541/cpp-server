@@ -10,6 +10,7 @@ message User
 {
 	uint64 id = 1;
 	string name = 2;
+	PlayerColor color = 3;
 }
 
 message Vector2
@@ -23,8 +24,9 @@ message PlayerInfo
 	uint64 id = 1;
 	string name = 2;
 	uint32 score = 3;
-	HeadData head = 4;
-	bool isgameover = 5;
+	PlayerColor color = 4;
+	HeadData head = 5;
+	bool isgameover = 6;
 }
 
 message ActorInfo

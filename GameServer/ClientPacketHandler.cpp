@@ -28,14 +28,20 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 
 	static Atomic<uint64> idGenerator = 1;
 	{
-		auto user = loginPkt.mutable_user();
-		user->set_id(idGenerator);
-
 		PlayerRef playerRef = MakeShared<Player>();
 		playerRef->playerId = idGenerator++;
+		playerRef->name = pkt.name();
+		PlayerColor color = static_cast<PlayerColor>((playerRef->playerId % 6));
+		playerRef->color = color;
 		playerRef->ownerSession = gameSession;
 
+
 		gameSession->_player = playerRef;
+
+		Protocol::User* user = loginPkt.mutable_user();
+		user->set_id(playerRef->playerId);
+		user->set_name(playerRef->name);
+		user->set_color(color);
 	}
 
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(loginPkt);
@@ -70,6 +76,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		playerInfo->set_id(gameSession->_player->playerId);
 		playerInfo->set_name(gameSession->_player->name);
 		playerInfo->set_score(gameSession->_player->score);
+		playerInfo->set_color(gameSession->_player->color);
 		playerInfo->set_isgameover(gameSession->_player->bGameOver);
 
 		Protocol::HeadData* headData = playerInfo->mutable_head();
@@ -85,6 +92,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 			playerInfo->set_id(player->playerId);
 			playerInfo->set_name(player->name);
 			playerInfo->set_score(player->score);
+			playerInfo->set_color(player->color);
 			playerInfo->set_isgameover(player->bGameOver);
 
 			Protocol::HeadData* headData = playerInfo->mutable_head();
@@ -104,6 +112,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		playerInfo->set_id(player->playerId);
 		playerInfo->set_name(player->name);
 		playerInfo->set_score(player->score);
+		playerInfo->set_color(player->color);
 		playerInfo->set_isgameover(player->bGameOver);
 
 		Protocol::HeadData* headData = playerInfo->mutable_head();

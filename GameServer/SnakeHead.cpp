@@ -4,6 +4,7 @@
 #include "SnakeBody.h"
 #include "ObjectIdHandler.h"
 #include "ClientPacketHandler.h"
+#include "Player.h"
 
 using namespace Protocol;
 
@@ -178,6 +179,10 @@ void SnakeHead::OnCollision(const Protocol::ObjectType& objectType)
 			break;
 
 		case Protocol::ObjectType::OBJECT_ITEM:
+			
+			if(_owner)
+				_owner->AddScore();
+
 			++_addBodyCallCount;
 			break;
 	}

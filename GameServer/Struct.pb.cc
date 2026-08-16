@@ -25,6 +25,7 @@ PROTOBUF_CONSTEXPR User::User(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.id_)*/uint64_t{0u}
+  , /*decltype(_impl_.color_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct UserDefaultTypeInternal {
   PROTOBUF_CONSTEXPR UserDefaultTypeInternal()
@@ -55,6 +56,7 @@ PROTOBUF_CONSTEXPR PlayerInfo::PlayerInfo(
   , /*decltype(_impl_.head_)*/nullptr
   , /*decltype(_impl_.id_)*/uint64_t{0u}
   , /*decltype(_impl_.score_)*/0u
+  , /*decltype(_impl_.color_)*/0
   , /*decltype(_impl_.isgameover_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct PlayerInfoDefaultTypeInternal {
@@ -139,6 +141,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::User, _impl_.id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::User, _impl_.name_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::User, _impl_.color_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Vector2, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -156,6 +159,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.name_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.score_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.color_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.head_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.isgameover_),
   ~0u,  // no _has_bits_
@@ -196,12 +200,12 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::User)},
-  { 8, -1, -1, sizeof(::Protocol::Vector2)},
-  { 16, -1, -1, sizeof(::Protocol::PlayerInfo)},
-  { 27, -1, -1, sizeof(::Protocol::ActorInfo)},
-  { 35, -1, -1, sizeof(::Protocol::FieldData)},
-  { 43, -1, -1, sizeof(::Protocol::TrailData)},
-  { 52, -1, -1, sizeof(::Protocol::HeadData)},
+  { 9, -1, -1, sizeof(::Protocol::Vector2)},
+  { 17, -1, -1, sizeof(::Protocol::PlayerInfo)},
+  { 29, -1, -1, sizeof(::Protocol::ActorInfo)},
+  { 37, -1, -1, sizeof(::Protocol::FieldData)},
+  { 45, -1, -1, sizeof(::Protocol::TrailData)},
+  { 54, -1, -1, sizeof(::Protocol::HeadData)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -215,29 +219,31 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\" \n\004"
-  "User\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\"\037\n\007Vector"
-  "2\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"k\n\nPlayerInfo\022\n\n"
-  "\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022\r\n\005score\030\003 \001(\r\022 "
-  "\n\004head\030\004 \001(\0132\022.Protocol.HeadData\022\022\n\nisga"
-  "meover\030\005 \001(\010\"=\n\tActorInfo\022\020\n\010objectId\030\001 "
-  "\001(\004\022\036\n\003pos\030\002 \001(\0132\021.Protocol.Vector2\">\n\tF"
-  "ieldData\022\036\n\003pos\030\001 \001(\0132\021.Protocol.Vector2"
-  "\022\021\n\tfieldflag\030\002 \001(\r\"~\n\tTrailData\022\036\n\003pos\030"
-  "\001 \001(\0132\021.Protocol.Vector2\022(\n\007prevdir\030\002 \001("
-  "\0162\027.Protocol.DirectionType\022\'\n\006curdir\030\003 \001"
-  "(\0162\027.Protocol.DirectionType\"\214\001\n\010HeadData"
-  "\022\"\n\005actor\030\001 \001(\0132\023.Protocol.ActorInfo\022\021\n\t"
-  "moveSpeed\030\002 \001(\002\022$\n\003dir\030\003 \001(\0162\027.Protocol."
-  "DirectionType\022#\n\006trails\030\004 \003(\0132\023.Protocol"
-  ".TrailDatab\006proto3"
+  "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\"F\n\004"
+  "User\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022$\n\005color\030"
+  "\003 \001(\0162\025.Protocol.PlayerColor\"\037\n\007Vector2\022"
+  "\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"\221\001\n\nPlayerInfo\022\n\n\002"
+  "id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022\r\n\005score\030\003 \001(\r\022$\n"
+  "\005color\030\004 \001(\0162\025.Protocol.PlayerColor\022 \n\004h"
+  "ead\030\005 \001(\0132\022.Protocol.HeadData\022\022\n\nisgameo"
+  "ver\030\006 \001(\010\"=\n\tActorInfo\022\020\n\010objectId\030\001 \001(\004"
+  "\022\036\n\003pos\030\002 \001(\0132\021.Protocol.Vector2\">\n\tFiel"
+  "dData\022\036\n\003pos\030\001 \001(\0132\021.Protocol.Vector2\022\021\n"
+  "\tfieldflag\030\002 \001(\r\"~\n\tTrailData\022\036\n\003pos\030\001 \001"
+  "(\0132\021.Protocol.Vector2\022(\n\007prevdir\030\002 \001(\0162\027"
+  ".Protocol.DirectionType\022\'\n\006curdir\030\003 \001(\0162"
+  "\027.Protocol.DirectionType\"\214\001\n\010HeadData\022\"\n"
+  "\005actor\030\001 \001(\0132\023.Protocol.ActorInfo\022\021\n\tmov"
+  "eSpeed\030\002 \001(\002\022$\n\003dir\030\003 \001(\0162\027.Protocol.Dir"
+  "ectionType\022#\n\006trails\030\004 \003(\0132\023.Protocol.Tr"
+  "ailDatab\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 618, descriptor_table_protodef_Struct_2eproto,
+    false, false, 695, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 7,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -270,6 +276,7 @@ User::User(const User& from)
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
     , decltype(_impl_.id_){}
+    , decltype(_impl_.color_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -281,7 +288,9 @@ User::User(const User& from)
     _this->_impl_.name_.Set(from._internal_name(), 
       _this->GetArenaForAllocation());
   }
-  _this->_impl_.id_ = from._impl_.id_;
+  ::memcpy(&_impl_.id_, &from._impl_.id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.color_) -
+    reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.color_));
   // @@protoc_insertion_point(copy_constructor:Protocol.User)
 }
 
@@ -292,6 +301,7 @@ inline void User::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
     , decltype(_impl_.id_){uint64_t{0u}}
+    , decltype(_impl_.color_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -325,7 +335,9 @@ void User::Clear() {
   (void) cached_has_bits;
 
   _impl_.name_.ClearToEmpty();
-  _impl_.id_ = uint64_t{0u};
+  ::memset(&_impl_.id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.color_) -
+      reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.color_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -350,6 +362,15 @@ const char* User::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "Protocol.User.name"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.PlayerColor color = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_color(static_cast<::Protocol::PlayerColor>(val));
         } else
           goto handle_unusual;
         continue;
@@ -398,6 +419,13 @@ uint8_t* User::_InternalSerialize(
         2, this->_internal_name(), target);
   }
 
+  // .Protocol.PlayerColor color = 3;
+  if (this->_internal_color() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      3, this->_internal_color(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -426,6 +454,12 @@ size_t User::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_id());
   }
 
+  // .Protocol.PlayerColor color = 3;
+  if (this->_internal_color() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_color());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -450,6 +484,9 @@ void User::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_
   if (from._internal_id() != 0) {
     _this->_internal_set_id(from._internal_id());
   }
+  if (from._internal_color() != 0) {
+    _this->_internal_set_color(from._internal_color());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -473,7 +510,12 @@ void User::InternalSwap(User* other) {
       &_impl_.name_, lhs_arena,
       &other->_impl_.name_, rhs_arena
   );
-  swap(_impl_.id_, other->_impl_.id_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(User, _impl_.color_)
+      + sizeof(User::_impl_.color_)
+      - PROTOBUF_FIELD_OFFSET(User, _impl_.id_)>(
+          reinterpret_cast<char*>(&_impl_.id_),
+          reinterpret_cast<char*>(&other->_impl_.id_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata User::GetMetadata() const {
@@ -718,6 +760,7 @@ PlayerInfo::PlayerInfo(const PlayerInfo& from)
     , decltype(_impl_.head_){nullptr}
     , decltype(_impl_.id_){}
     , decltype(_impl_.score_){}
+    , decltype(_impl_.color_){}
     , decltype(_impl_.isgameover_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -748,6 +791,7 @@ inline void PlayerInfo::SharedCtor(
     , decltype(_impl_.head_){nullptr}
     , decltype(_impl_.id_){uint64_t{0u}}
     , decltype(_impl_.score_){0u}
+    , decltype(_impl_.color_){0}
     , decltype(_impl_.isgameover_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -825,17 +869,26 @@ const char* PlayerInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
-      // .Protocol.HeadData head = 4;
+      // .Protocol.PlayerColor color = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_color(static_cast<::Protocol::PlayerColor>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.HeadData head = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_head(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // bool isgameover = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+      // bool isgameover = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
           _impl_.isgameover_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -892,17 +945,24 @@ uint8_t* PlayerInfo::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_score(), target);
   }
 
-  // .Protocol.HeadData head = 4;
+  // .Protocol.PlayerColor color = 4;
+  if (this->_internal_color() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      4, this->_internal_color(), target);
+  }
+
+  // .Protocol.HeadData head = 5;
   if (this->_internal_has_head()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::head(this),
+      InternalWriteMessage(5, _Internal::head(this),
         _Internal::head(this).GetCachedSize(), target, stream);
   }
 
-  // bool isgameover = 5;
+  // bool isgameover = 6;
   if (this->_internal_isgameover() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_isgameover(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(6, this->_internal_isgameover(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -928,7 +988,7 @@ size_t PlayerInfo::ByteSizeLong() const {
         this->_internal_name());
   }
 
-  // .Protocol.HeadData head = 4;
+  // .Protocol.HeadData head = 5;
   if (this->_internal_has_head()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -945,7 +1005,13 @@ size_t PlayerInfo::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_score());
   }
 
-  // bool isgameover = 5;
+  // .Protocol.PlayerColor color = 4;
+  if (this->_internal_color() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_color());
+  }
+
+  // bool isgameover = 6;
   if (this->_internal_isgameover() != 0) {
     total_size += 1 + 1;
   }
@@ -980,6 +1046,9 @@ void PlayerInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   }
   if (from._internal_score() != 0) {
     _this->_internal_set_score(from._internal_score());
+  }
+  if (from._internal_color() != 0) {
+    _this->_internal_set_color(from._internal_color());
   }
   if (from._internal_isgameover() != 0) {
     _this->_internal_set_isgameover(from._internal_isgameover());

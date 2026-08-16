@@ -29,3 +29,13 @@ enum FieldType
 	FIELD_ITEM = 1;
 	FIELD_OBSTACLE = 2; 
 }
+
+enum PlayerColor
+{
+	COLOR_WHITE = 0;
+	COLOR_GREEN = 1;
+	COLOR_RED = 2;
+	COLOR_BLUE = 3;
+	COLOR_CYAN = 4;
+	COLOR_PURPLE = 5;
+}
