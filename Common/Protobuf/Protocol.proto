@@ -47,7 +47,7 @@ message C_MOVE_ACTOR
 
 message S_UPDATE_ROOM
 {
-	repeated HeadData heads = 1;
+	repeated PlayerInfo players = 1;
 	repeated FieldData fieldData = 2;
 }
 

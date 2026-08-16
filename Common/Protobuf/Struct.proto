@@ -24,6 +24,7 @@ message PlayerInfo
 	string name = 2;
 	uint32 score = 3;
 	HeadData head = 4;
+	bool isgameover = 5;
 }
 
 message ActorInfo

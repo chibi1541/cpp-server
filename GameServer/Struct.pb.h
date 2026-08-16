@@ -529,6 +529,7 @@ class PlayerInfo final :
     kHeadFieldNumber = 4,
     kIdFieldNumber = 1,
     kScoreFieldNumber = 3,
+    kIsgameoverFieldNumber = 5,
   };
   // string name = 2;
   void clear_name();
@@ -580,6 +581,15 @@ class PlayerInfo final :
   void _internal_set_score(uint32_t value);
   public:
 
+  // bool isgameover = 5;
+  void clear_isgameover();
+  bool isgameover() const;
+  void set_isgameover(bool value);
+  private:
+  bool _internal_isgameover() const;
+  void _internal_set_isgameover(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.PlayerInfo)
  private:
   class _Internal;
@@ -592,6 +602,7 @@ class PlayerInfo final :
     ::Protocol::HeadData* head_;
     uint64_t id_;
     uint32_t score_;
+    bool isgameover_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1618,6 +1629,26 @@ inline void PlayerInfo::set_allocated_head(::Protocol::HeadData* head) {
   }
   _impl_.head_ = head;
   // @@protoc_insertion_point(field_set_allocated:Protocol.PlayerInfo.head)
+}
+
+// bool isgameover = 5;
+inline void PlayerInfo::clear_isgameover() {
+  _impl_.isgameover_ = false;
+}
+inline bool PlayerInfo::_internal_isgameover() const {
+  return _impl_.isgameover_;
+}
+inline bool PlayerInfo::isgameover() const {
+  // @@protoc_insertion_point(field_get:Protocol.PlayerInfo.isgameover)
+  return _internal_isgameover();
+}
+inline void PlayerInfo::_internal_set_isgameover(bool value) {
+  
+  _impl_.isgameover_ = value;
+}
+inline void PlayerInfo::set_isgameover(bool value) {
+  _internal_set_isgameover(value);
+  // @@protoc_insertion_point(field_set:Protocol.PlayerInfo.isgameover)
 }
 
 // -------------------------------------------------------------------

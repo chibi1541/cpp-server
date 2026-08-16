@@ -35,16 +35,17 @@ public:
 
 	const deque<Protocol::TrailData>& GetTrailQueue() const {return _trailQueue; }
 
-	const vector<Vector2> GetSnakeArray() const;
+	const vector<Protocol::Vector2> GetSnakeArray() const;
 
 	bool SelfCheck() const;
 
 	virtual void OnCollision(const Protocol::ObjectType& objectType) override;
 
-private:
 	virtual void Tick(float deltaTime) override;
 
-	virtual void MarkDestory() override;
+	const PlayerRef& GetOwner() const {return _owner;}
+
+private:
 
 	virtual const vector<Vector2> GetCollisionCheckArea() const override;
 
@@ -55,7 +56,6 @@ private:
 	// 앞 궤적의 좌표와 뒷 궤적의 좌표가 같은 액터가 있다면 true를 반환
 	bool WarningTrailPos();
 
-	const PlayerRef& GetOwner() const {return _owner;}
 
 private:
 	queue<DirectionType>		_inputQueue;	// 클라로부터 받은 입력을 바로 처리하지 않고 좌표가 1이라도 변경된 후에 하나씩 처리

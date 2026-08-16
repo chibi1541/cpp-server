@@ -42,12 +42,11 @@ public:
 	void Leave(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
 
-	void AddActor(ActorRef newActor);
-	void ReleaseActor(uint64 objectId);
+	void ReleaseHead(uint64 objectId);
 
 	vector<PlayerRef> GetPlayersLocked();
 
-	PlayerRef GetPlayerLocked(uint64 playerId);
+	PlayerRef& GetPlayer(uint64 playerId);
 
 	void Tick(float deltaTime);
 
@@ -55,15 +54,11 @@ public:
 
 	void SetDirection(uint64 objectId, Protocol::DirectionType newDir);
 
-	void CheckCollision();
+	void ProcessDestoryActor(SnakeHead* actor);
 
-	bool ComparePos(const Protocol::Vector2& left, const Protocol::Vector2& right);
+	void DestoryHeads();
 
-	void ProcessDestoryActor(Actor* actor);
-
-	void DestoryActors();
-
-	void RegisterActors();
+	void RegisterHeads();
 
 	uint32 GetFieldWidth() const { return WIDTH; }
 	uint32 GetFieldHeight() const { return HEIGHT; }
@@ -78,10 +73,10 @@ private:
 
 	map<uint64, PlayerRef> _players;
 
-	vector<ActorRef> _actors;
+	//vector<ActorRef> _actors;
 	vector<SnakeHeadRef> _heads;
 
-	vector<ActorRef> _addRequestedActorList;
+	vector<SnakeHeadRef> _addRequestedActorList;
 
 	// temp
 	float _spawnDelta = 3.f;

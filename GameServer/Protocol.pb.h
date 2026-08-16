@@ -1314,26 +1314,26 @@ class S_UPDATE_ROOM final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kHeadsFieldNumber = 1,
+    kPlayersFieldNumber = 1,
     kFieldDataFieldNumber = 2,
   };
-  // repeated .Protocol.HeadData heads = 1;
-  int heads_size() const;
+  // repeated .Protocol.PlayerInfo players = 1;
+  int players_size() const;
   private:
-  int _internal_heads_size() const;
+  int _internal_players_size() const;
   public:
-  void clear_heads();
-  ::Protocol::HeadData* mutable_heads(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >*
-      mutable_heads();
+  void clear_players();
+  ::Protocol::PlayerInfo* mutable_players(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::PlayerInfo >*
+      mutable_players();
   private:
-  const ::Protocol::HeadData& _internal_heads(int index) const;
-  ::Protocol::HeadData* _internal_add_heads();
+  const ::Protocol::PlayerInfo& _internal_players(int index) const;
+  ::Protocol::PlayerInfo* _internal_add_players();
   public:
-  const ::Protocol::HeadData& heads(int index) const;
-  ::Protocol::HeadData* add_heads();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >&
-      heads() const;
+  const ::Protocol::PlayerInfo& players(int index) const;
+  ::Protocol::PlayerInfo* add_players();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::PlayerInfo >&
+      players() const;
 
   // repeated .Protocol.FieldData fieldData = 2;
   int fielddata_size() const;
@@ -1361,7 +1361,7 @@ class S_UPDATE_ROOM final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData > heads_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::PlayerInfo > players_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::FieldData > fielddata_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2017,41 +2017,41 @@ inline void C_MOVE_ACTOR::set_newdir(::Protocol::DirectionType value) {
 
 // S_UPDATE_ROOM
 
-// repeated .Protocol.HeadData heads = 1;
-inline int S_UPDATE_ROOM::_internal_heads_size() const {
-  return _impl_.heads_.size();
+// repeated .Protocol.PlayerInfo players = 1;
+inline int S_UPDATE_ROOM::_internal_players_size() const {
+  return _impl_.players_.size();
 }
-inline int S_UPDATE_ROOM::heads_size() const {
-  return _internal_heads_size();
+inline int S_UPDATE_ROOM::players_size() const {
+  return _internal_players_size();
 }
-inline ::Protocol::HeadData* S_UPDATE_ROOM::mutable_heads(int index) {
-  // @@protoc_insertion_point(field_mutable:Protocol.S_UPDATE_ROOM.heads)
-  return _impl_.heads_.Mutable(index);
+inline ::Protocol::PlayerInfo* S_UPDATE_ROOM::mutable_players(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_UPDATE_ROOM.players)
+  return _impl_.players_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >*
-S_UPDATE_ROOM::mutable_heads() {
-  // @@protoc_insertion_point(field_mutable_list:Protocol.S_UPDATE_ROOM.heads)
-  return &_impl_.heads_;
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::PlayerInfo >*
+S_UPDATE_ROOM::mutable_players() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_UPDATE_ROOM.players)
+  return &_impl_.players_;
 }
-inline const ::Protocol::HeadData& S_UPDATE_ROOM::_internal_heads(int index) const {
-  return _impl_.heads_.Get(index);
+inline const ::Protocol::PlayerInfo& S_UPDATE_ROOM::_internal_players(int index) const {
+  return _impl_.players_.Get(index);
 }
-inline const ::Protocol::HeadData& S_UPDATE_ROOM::heads(int index) const {
-  // @@protoc_insertion_point(field_get:Protocol.S_UPDATE_ROOM.heads)
-  return _internal_heads(index);
+inline const ::Protocol::PlayerInfo& S_UPDATE_ROOM::players(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_UPDATE_ROOM.players)
+  return _internal_players(index);
 }
-inline ::Protocol::HeadData* S_UPDATE_ROOM::_internal_add_heads() {
-  return _impl_.heads_.Add();
+inline ::Protocol::PlayerInfo* S_UPDATE_ROOM::_internal_add_players() {
+  return _impl_.players_.Add();
 }
-inline ::Protocol::HeadData* S_UPDATE_ROOM::add_heads() {
-  ::Protocol::HeadData* _add = _internal_add_heads();
-  // @@protoc_insertion_point(field_add:Protocol.S_UPDATE_ROOM.heads)
+inline ::Protocol::PlayerInfo* S_UPDATE_ROOM::add_players() {
+  ::Protocol::PlayerInfo* _add = _internal_add_players();
+  // @@protoc_insertion_point(field_add:Protocol.S_UPDATE_ROOM.players)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::HeadData >&
-S_UPDATE_ROOM::heads() const {
-  // @@protoc_insertion_point(field_list:Protocol.S_UPDATE_ROOM.heads)
-  return _impl_.heads_;
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::PlayerInfo >&
+S_UPDATE_ROOM::players() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_UPDATE_ROOM.players)
+  return _impl_.players_;
 }
 
 // repeated .Protocol.FieldData fieldData = 2;

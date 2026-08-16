@@ -22,8 +22,6 @@ bool Handle_INVALID(PacketSessionRef& session, BYTE* buffer, int32 len)
 bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 {
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-
-	// TODO : Validation 체크
 	
 	Protocol::S_LOGIN loginPkt;
 	loginPkt.set_success(true);
@@ -72,9 +70,10 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		playerInfo->set_id(gameSession->_player->playerId);
 		playerInfo->set_name(gameSession->_player->name);
 		playerInfo->set_score(gameSession->_player->score);
+		playerInfo->set_isgameover(gameSession->_player->bGameOver);
 
 		Protocol::HeadData* headData = playerInfo->mutable_head();
-		snakeActor->MakeHeadData(&headData);
+		snakeActor->MakeHeadData(OUT &headData);
 
 		const vector<PlayerRef>& players = GRoom->GetPlayersLocked();
 		for(const PlayerRef& player : players)
@@ -86,8 +85,10 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 			playerInfo->set_id(player->playerId);
 			playerInfo->set_name(player->name);
 			playerInfo->set_score(player->score);
+			playerInfo->set_isgameover(player->bGameOver);
+
 			Protocol::HeadData* headData = playerInfo->mutable_head();
-			player->headActor->MakeHeadData(&headData);
+			player->headActor->MakeHeadData(OUT &headData);
 
 		}
 
@@ -103,9 +104,10 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		playerInfo->set_id(player->playerId);
 		playerInfo->set_name(player->name);
 		playerInfo->set_score(player->score);
+		playerInfo->set_isgameover(player->bGameOver);
 
 		Protocol::HeadData* headData = playerInfo->mutable_head();
-		player->headActor->MakeHeadData(&headData);
+		player->headActor->MakeHeadData(OUT &headData);
 
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
 		GRoom->DoAsync(&Room::Broadcast, sendBuffer);

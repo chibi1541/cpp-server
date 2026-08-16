@@ -10,7 +10,7 @@
 
 using namespace Protocol;
 
-void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
+void CollisionSystem::ProcessCollision(const vector<SnakeHeadRef>& actorList)
 {
 	// 예외 처리
 	if (actorList.empty())
@@ -69,7 +69,7 @@ void CollisionSystem::ProcessCollision(const vector<ActorRef>& actorList)
 	}
 }
 
-void CollisionSystem::ProcessFieldCheck(const vector<ActorRef>& actorList, const FieldInfo* field, uint32 width, uint32 height)
+void CollisionSystem::ProcessFieldCheck(const vector<SnakeHeadRef>& actorList, const FieldInfo* field, uint32 width, uint32 height)
 {
 	ASSERT_CRASH(field != nullptr);
 
@@ -115,5 +115,5 @@ bool CollisionSystem::Test(const ActorRef& left, const ActorRef& right)
 		}
 	}
 
-	return true;
+	return false;
 }

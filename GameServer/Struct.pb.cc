@@ -55,6 +55,7 @@ PROTOBUF_CONSTEXPR PlayerInfo::PlayerInfo(
   , /*decltype(_impl_.head_)*/nullptr
   , /*decltype(_impl_.id_)*/uint64_t{0u}
   , /*decltype(_impl_.score_)*/0u
+  , /*decltype(_impl_.isgameover_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct PlayerInfoDefaultTypeInternal {
   PROTOBUF_CONSTEXPR PlayerInfoDefaultTypeInternal()
@@ -156,6 +157,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.name_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.score_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.head_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.isgameover_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::ActorInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -196,10 +198,10 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 0, -1, -1, sizeof(::Protocol::User)},
   { 8, -1, -1, sizeof(::Protocol::Vector2)},
   { 16, -1, -1, sizeof(::Protocol::PlayerInfo)},
-  { 26, -1, -1, sizeof(::Protocol::ActorInfo)},
-  { 34, -1, -1, sizeof(::Protocol::FieldData)},
-  { 42, -1, -1, sizeof(::Protocol::TrailData)},
-  { 51, -1, -1, sizeof(::Protocol::HeadData)},
+  { 27, -1, -1, sizeof(::Protocol::ActorInfo)},
+  { 35, -1, -1, sizeof(::Protocol::FieldData)},
+  { 43, -1, -1, sizeof(::Protocol::TrailData)},
+  { 52, -1, -1, sizeof(::Protocol::HeadData)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -215,26 +217,27 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\" \n\004"
   "User\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\"\037\n\007Vector"
-  "2\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"W\n\nPlayerInfo\022\n\n"
+  "2\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"k\n\nPlayerInfo\022\n\n"
   "\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022\r\n\005score\030\003 \001(\r\022 "
-  "\n\004head\030\004 \001(\0132\022.Protocol.HeadData\"=\n\tActo"
-  "rInfo\022\020\n\010objectId\030\001 \001(\004\022\036\n\003pos\030\002 \001(\0132\021.P"
-  "rotocol.Vector2\">\n\tFieldData\022\036\n\003pos\030\001 \001("
-  "\0132\021.Protocol.Vector2\022\021\n\tfieldflag\030\002 \001(\r\""
-  "~\n\tTrailData\022\036\n\003pos\030\001 \001(\0132\021.Protocol.Vec"
-  "tor2\022(\n\007prevdir\030\002 \001(\0162\027.Protocol.Directi"
-  "onType\022\'\n\006curdir\030\003 \001(\0162\027.Protocol.Direct"
-  "ionType\"\214\001\n\010HeadData\022\"\n\005actor\030\001 \001(\0132\023.Pr"
-  "otocol.ActorInfo\022\021\n\tmoveSpeed\030\002 \001(\002\022$\n\003d"
-  "ir\030\003 \001(\0162\027.Protocol.DirectionType\022#\n\006tra"
-  "ils\030\004 \003(\0132\023.Protocol.TrailDatab\006proto3"
+  "\n\004head\030\004 \001(\0132\022.Protocol.HeadData\022\022\n\nisga"
+  "meover\030\005 \001(\010\"=\n\tActorInfo\022\020\n\010objectId\030\001 "
+  "\001(\004\022\036\n\003pos\030\002 \001(\0132\021.Protocol.Vector2\">\n\tF"
+  "ieldData\022\036\n\003pos\030\001 \001(\0132\021.Protocol.Vector2"
+  "\022\021\n\tfieldflag\030\002 \001(\r\"~\n\tTrailData\022\036\n\003pos\030"
+  "\001 \001(\0132\021.Protocol.Vector2\022(\n\007prevdir\030\002 \001("
+  "\0162\027.Protocol.DirectionType\022\'\n\006curdir\030\003 \001"
+  "(\0162\027.Protocol.DirectionType\"\214\001\n\010HeadData"
+  "\022\"\n\005actor\030\001 \001(\0132\023.Protocol.ActorInfo\022\021\n\t"
+  "moveSpeed\030\002 \001(\002\022$\n\003dir\030\003 \001(\0162\027.Protocol."
+  "DirectionType\022#\n\006trails\030\004 \003(\0132\023.Protocol"
+  ".TrailDatab\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 598, descriptor_table_protodef_Struct_2eproto,
+    false, false, 618, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 7,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -715,6 +718,7 @@ PlayerInfo::PlayerInfo(const PlayerInfo& from)
     , decltype(_impl_.head_){nullptr}
     , decltype(_impl_.id_){}
     , decltype(_impl_.score_){}
+    , decltype(_impl_.isgameover_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -730,8 +734,8 @@ PlayerInfo::PlayerInfo(const PlayerInfo& from)
     _this->_impl_.head_ = new ::Protocol::HeadData(*from._impl_.head_);
   }
   ::memcpy(&_impl_.id_, &from._impl_.id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.score_) -
-    reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.score_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.isgameover_) -
+    reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.isgameover_));
   // @@protoc_insertion_point(copy_constructor:Protocol.PlayerInfo)
 }
 
@@ -744,6 +748,7 @@ inline void PlayerInfo::SharedCtor(
     , decltype(_impl_.head_){nullptr}
     , decltype(_impl_.id_){uint64_t{0u}}
     , decltype(_impl_.score_){0u}
+    , decltype(_impl_.isgameover_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -783,8 +788,8 @@ void PlayerInfo::Clear() {
   }
   _impl_.head_ = nullptr;
   ::memset(&_impl_.id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.score_) -
-      reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.score_));
+      reinterpret_cast<char*>(&_impl_.isgameover_) -
+      reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.isgameover_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -824,6 +829,14 @@ const char* PlayerInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_head(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool isgameover = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.isgameover_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -886,6 +899,12 @@ uint8_t* PlayerInfo::_InternalSerialize(
         _Internal::head(this).GetCachedSize(), target, stream);
   }
 
+  // bool isgameover = 5;
+  if (this->_internal_isgameover() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_isgameover(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -926,6 +945,11 @@ size_t PlayerInfo::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_score());
   }
 
+  // bool isgameover = 5;
+  if (this->_internal_isgameover() != 0) {
+    total_size += 1 + 1;
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -957,6 +981,9 @@ void PlayerInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   if (from._internal_score() != 0) {
     _this->_internal_set_score(from._internal_score());
   }
+  if (from._internal_isgameover() != 0) {
+    _this->_internal_set_isgameover(from._internal_isgameover());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -981,8 +1008,8 @@ void PlayerInfo::InternalSwap(PlayerInfo* other) {
       &other->_impl_.name_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.score_)
-      + sizeof(PlayerInfo::_impl_.score_)
+      PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.isgameover_)
+      + sizeof(PlayerInfo::_impl_.isgameover_)
       - PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.head_)>(
           reinterpret_cast<char*>(&_impl_.head_),
           reinterpret_cast<char*>(&other->_impl_.head_));

@@ -5,6 +5,8 @@
 #include "ObjectIdHandler.h"
 #include "ClientPacketHandler.h"
 
+using namespace Protocol;
+
 SnakeHead::SnakeHead(PlayerRef owner)
 	: _owner(owner)
 {
@@ -91,7 +93,6 @@ void SnakeHead::AddTrail(const Vector2& pos)
 	newTrail.set_curdir(_direction);
 
 	_trailQueue.emplace_back(newTrail);
-	GRoom->AddFieldFlag(newTrail.pos().x(), newTrail.pos().y(), FieldType::FIELD_OBSTACLE);
 
 	if (_addBodyCallCount > 0)
 	{
@@ -103,7 +104,6 @@ void SnakeHead::AddTrail(const Vector2& pos)
 	{
 		Protocol::TrailData trail = _trailQueue.front();
 		_trailQueue.pop_front();
-		GRoom->RemoveFieldFlag(trail.pos().x(), trail.pos().y(), FieldType::FIELD_OBSTACLE);
 	}
 }
 
@@ -118,10 +118,10 @@ DirectionType SnakeHead::FindTrailDir(const Vector2 pos)
 	return DirectionType::DIR_NONE;
 }
 
-const vector<Vector2> SnakeHead::GetSnakeArray() const
+const vector<Protocol::Vector2> SnakeHead::GetSnakeArray() const
 {
-	vector<Vector2> ret;
-	Vector2 pos;
+	vector<Protocol::Vector2> ret;
+	Protocol::Vector2 pos;
 	pos.set_x(position.x() / 100);
 	pos.set_y(position.y() / 100);
 
@@ -137,8 +137,8 @@ const vector<Vector2> SnakeHead::GetSnakeArray() const
 
 bool SnakeHead::SelfCheck() const
 {
-	const vector<Vector2> checkArea = GetCollisionCheckArea();
-	const vector<Vector2> fullArea = GetSnakeArray();
+	const vector<Protocol::Vector2> checkArea = GetCollisionCheckArea();
+	const vector<Protocol::Vector2> fullArea = GetSnakeArray();
 
 	if(checkArea.size() >= fullArea.size())
 		return false;
@@ -182,11 +182,6 @@ void SnakeHead::OnCollision(const Protocol::ObjectType& objectType)
 			break;
 	}
 
-}
-
-void SnakeHead::MarkDestory()
-{
-	Actor::MarkDestory();
 }
 
 const vector<Vector2> SnakeHead::GetCollisionCheckArea() const
