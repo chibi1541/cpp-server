@@ -87,7 +87,7 @@ private:
 	vector<SnakeHeadRef> _addRequestedActorList;
 
 	// temp
-	float _spawnDelta = 3.f;
+	float _spawnDelta = 2.f;
 	float _elapsedTime = 0.f;
 
 	uint64 _prevElapsedTime = 0;

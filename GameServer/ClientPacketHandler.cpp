@@ -9,6 +9,7 @@
 #include <random>
 #include "SnakeHead.h"
 #include "ObjectIdHandler.h"
+#include "Enum.pb.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -55,14 +56,15 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
 	gameSession->_room = GRoom;
-
-	int x = RandomRange32(5, 75);
+	
+	SetRandomSeed64();
+	int x = RandomRange32(3, 77);
 	int y = RandomRange32(3, 27);
 
-	// TODO : spawn 좌표 변경
 	SnakeHeadRef snakeActor = MakeShared<SnakeHead>(
 		ObjectIdHandler::GenerateObjectId(Protocol::ObjectType::OBJECT_SNAKE_HEAD), x * 100, y* 100, gameSession->_player);
 	gameSession->_player->headActor = snakeActor;
+	snakeActor->SetDirection(( x > 40) ? DirectionType::DIR_LEFT : DirectionType::DIR_RIGHT);
 
 	GRoom->DoAsync(&Room::Enter, gameSession->_player);
 	{

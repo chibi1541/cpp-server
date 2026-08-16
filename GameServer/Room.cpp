@@ -99,19 +99,28 @@ void Room::Tick(float deltaTime)
 	uint64 elapsedTime = (_prevElapsedTime != 0) ? (GetTickCount64() - _prevElapsedTime) : 0;
 	float fElapsedTime = static_cast<float>(elapsedTime) / 1000.f;
 
-	// TODO : 아이템 추가 로직 수정
-	if (_players.size() > 0 && _itemCount < 150)
+	if (_players.size() > 0 && _itemCount < 100)
 	{
 		_elapsedTime += fElapsedTime;
 		if (_spawnDelta <= _elapsedTime)
 		{
+			SetRandomSeed32();
+			int32 genCount = RandomRange32(5, 15);
 			int32 x = RandomRange32(1, 79);
 			int32 y = RandomRange32(1, 29);
 
-			if(GetFieldInfo(x, y).CheckFlag(Protocol::FIELD_ITEM) == false)
-				AddFieldFlag(x, y, Protocol::FIELD_ITEM);
-		}
+			for(int32 idx = 0 ; idx< genCount; ++idx)
+			{
+				int32 xPos = x + (idx / 5);
+				int32 yPos = y + (idx % 5);
 
+
+				if (GetFieldInfo(xPos, yPos).CheckFlag(Protocol::FIELD_ITEM) == false)
+					AddFieldFlag(xPos, yPos, Protocol::FIELD_ITEM);
+			}
+
+			_elapsedTime = 0.f;
+		}
 	}
 
 	RegisterHeads();
