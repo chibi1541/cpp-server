@@ -24,9 +24,21 @@ message C_ENTER_GAME
 message S_ENTER_GAME
 {
 	bool success = 1;
-	uint32 width = 2;
-	uint32 height = 3;
-	repeated PlayerInfo players = 4;
+	uint32 needplayer = 2;
+	uint32 width = 3;
+	uint32 height = 4;
+	repeated PlayerInfo players = 5;
+}
+
+message C_EXIT_GAME
+{
+	
+}
+
+message S_START_GAME
+{
+	bool success = 1;
+	uint32 counttime = 2;
 }
 
 message S_SPAWN_ACTOR
@@ -54,4 +66,9 @@ message S_UPDATE_ROOM
 message S_DESTROY_ACTOR
 {
 	uint64 id = 1;
+}
+
+message S_GAME_RESULT
+{
+	uint64 winplayerid = 1;
 }

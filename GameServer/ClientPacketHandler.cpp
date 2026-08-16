@@ -68,6 +68,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	{
 		Protocol::S_ENTER_GAME enterGamePkt;
 		enterGamePkt.set_success(true);
+		enterGamePkt.set_needplayer(static_cast<uint32_t>(Room::PLAYER_COUNT));
 
 		enterGamePkt.set_width(GRoom->GetFieldWidth());
 		enterGamePkt.set_height(GRoom->GetFieldHeight());
@@ -121,6 +122,27 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
 		GRoom->DoAsync(&Room::Broadcast, sendBuffer);
 	}
+
+	if(GRoom->GetPlayerCount() >= Room::PLAYER_COUNT)
+	{
+		Protocol::S_START_GAME startPkt;
+		startPkt.set_success(true);
+		startPkt.set_counttime(Room::COUNT_NUB);
+
+		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(startPkt);
+		GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+
+		GRoom->DoTimer(5500, &Room::Tick, 0.05f);
+	}
+
+	return true;
+}
+
+bool Handle_C_EXIT_GAME(PacketSessionRef& session, Protocol::C_EXIT_GAME& pkt)
+{
+	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+
+	gameSession->Disconnect(L"Exit Game");
 
 	return true;
 }

@@ -171,6 +171,8 @@ void Room::Tick(float deltaTime)
 		DoAsync(&Room::Broadcast, sendBuffer);
 	}
 
+	ProcessGameResult();
+
 	_prevElapsedTime = GetTickCount64();
 
 	DoTimer(50, &Room::Tick, 0.05f);
@@ -219,6 +221,30 @@ void Room::ProcessDestoryActor(SnakeHead* actor)
 	}
 }
 
+void Room::ProcessGameResult()
+{
+	int32 score = -1;
+	uint64 playerId = 0;
+	for(auto player : GetPlayersLocked())
+	{
+		if(player->bGameOver == false)
+		{
+			return;
+		}
+
+		score = max(score, static_cast<int32>(player->score));
+		if(score == player->score)
+			playerId = player->playerId;
+	}
+
+	Protocol::S_GAME_RESULT pkt;
+	pkt.set_winplayerid(playerId);
+	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	DoAsync(&Room::Broadcast, sendBuffer);
+
+	_bGameOver = true;
+}
+
 void Room::DestoryHeads()
 {
 	for (auto it = _heads.begin(); it < _heads.end();)
@@ -263,4 +289,14 @@ const FieldInfo& Room::GetFieldInfo(uint32 x, uint32 y) const
 {
 	const uint32 index = y * WIDTH + x;
 	return _field[index];
+}
+
+void Room::StartGame()
+{
+	if(_bStartGame || _bNowCounting)
+		return;
+
+	_bStartGame = true;
+	_bNowCounting = true;
+	_remainCount = static_cast<float>(COUNT_NUB);
 }

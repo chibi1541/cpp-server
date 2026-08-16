@@ -32,9 +32,9 @@ private:
 
 class Room : public JobQueue
 {
-	enum { WIDTH = 80, HEIGHT = 30 };
-
 public:
+	enum { WIDTH = 80, HEIGHT = 30, COUNT_NUB = 5, PLAYER_COUNT = 4};
+
 	Room();
 	~Room();
 
@@ -56,6 +56,8 @@ public:
 
 	void ProcessDestoryActor(SnakeHead* actor);
 
+	void ProcessGameResult();
+
 	void DestoryHeads();
 
 	void RegisterHeads();
@@ -67,6 +69,12 @@ public:
 	void RemoveFieldFlag(uint32 x, uint32 y, const Protocol::FieldType& flag);
 	const FieldInfo* GetField() const { return _field; }
 	const FieldInfo& GetFieldInfo(uint32 x, uint32 y) const;
+
+	void StartGame();
+	bool IsGameStart() const { return _bStartGame; }
+	bool IsNowCounting() const { return _bNowCounting; }
+
+	uint32 GetPlayerCount() const {return static_cast<uint32>(_players.size()); }
 
 private:
 	USE_LOCK;
@@ -93,6 +101,13 @@ private:
 	uint32 _itemCount = 0;
 
 	FieldInfo* _field;
+
+	// 게임 시작 상태
+	bool _bStartGame = false;
+	bool _bNowCounting = false;
+	float _remainCount;
+
+	bool _bGameOver = false;
 };
 
 extern shared_ptr<Room> GRoom;
