@@ -57,7 +57,6 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 	gameSession->_room = GRoom;
 	
-	SetRandomSeed64();
 	int x = RandomRange32(3, 77);
 	int y = RandomRange32(3, 27);
 

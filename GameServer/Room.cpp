@@ -104,7 +104,6 @@ void Room::Tick(float deltaTime)
 		_elapsedTime += fElapsedTime;
 		if (_spawnDelta <= _elapsedTime)
 		{
-			SetRandomSeed32();
 			int32 genCount = RandomRange32(5, 15);
 			int32 x = RandomRange32(1, 79);
 			int32 y = RandomRange32(1, 29);
@@ -132,13 +131,6 @@ void Room::Tick(float deltaTime)
 
 	// 액터끼리(뱀 머리)의 충돌 판정
 	collisionSys->ProcessCollision(_heads);
-
-	// 자기영역 체크
-	for (SnakeHeadRef head : _heads)
-	{
-		if(head->SelfCheck())
-			head->OnCollision(ObjectType::OBJECT_SNAKE_BODY);
-	}
 
 	// 맵 정보와 충돌 판정
 	collisionSys->ProcessFieldCheck(_heads, _field, WIDTH, HEIGHT);

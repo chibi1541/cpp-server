@@ -62,7 +62,7 @@ private:
 
 	PlayerRef					_owner;		// 참조 사이클 주의!
 	deque<SnakeBodyRef>			_bodys;
-	DirectionType				_direction = DirectionType::DIR_RIGHT;
+	DirectionType				_direction = DirectionType::DIR_NONE;
 	uint32						_tailIndex = 0;
 	float						_moveSpeed = 15.f;
 

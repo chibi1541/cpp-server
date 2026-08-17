@@ -27,30 +27,39 @@ void CollisionSystem::ProcessCollision(const vector<SnakeHeadRef>& actorList)
 	// 모든 액터를 순회하면서 충돌 검사
 	for (uint32 i = 0; i < count; ++i)
 	{
-		const ActorRef& left = actorList[i];
+		const SnakeHeadRef& left = actorList[i];
 		if (nullptr == left || left->IsActive() == false)
 		{
 			continue;
 		}
 
-		for (uint32 j = i + 1; j < count; ++j)
+		for (uint32 j = 0; j < count; ++j)
 		{
-			const ActorRef& right = actorList[j];
+			const SnakeHeadRef& right = actorList[j];
 			if (nullptr == right || right->IsActive() == false)
 			{
 				continue;
 			}
 
-			// 충돌 검사
-			if (Test(left, right))
+			if(left == right)
 			{
-				// 이벤트 발행할 목록에 추가할 데이터 생성.
-				CollisionPair pair = {};
-				pair.actor = left;
-				pair.other = right;
+				// 자기 영역이랑 붙힌건지 체크
+				if (left->SelfCheck())
+					left->OnCollision(ObjectType::OBJECT_SNAKE_BODY);
+			}
+			else
+			{
+				// 충돌 검사
+				if (Test(left, right))
+				{
+					// 이벤트 발행할 목록에 추가할 데이터 생성.
+					CollisionPair pair = {};
+					pair.actor = left;
+					pair.other = right;
 
-				// 목록에 추가
-				collidedActorList.emplace_back(pair);
+					// 목록에 추가
+					collidedActorList.emplace_back(pair);
+				}
 			}
 		}
 	}
