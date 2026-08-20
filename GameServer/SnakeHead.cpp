@@ -206,6 +206,7 @@ const vector<Vector2> SnakeHead::GetCollisionCheckArea() const
 		for(int32 index = static_cast<int32>(_trailQueue.size())- 1 ; index > 0 ; --index)
 		{
 			// 큐의 마지막(머리 바로 뒤의 몸통)부터 순서대로 순회하면서 궤적을 체크 영역으로 반환
+			// 이전 프레임의 영역은 전 Tick에서 체크 했을 것이므로 반환하지 않음
 			if (_trailQueue[index].pos() == prev)
 				break;
 

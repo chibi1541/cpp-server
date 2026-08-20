@@ -33,6 +33,10 @@
 *.a
 *.lib
 
+!libprotobufd.dll
+!libprotobufd.lib
+!ServerCore.lib
+
 # Executables
 *.exe
 *.out
@@ -70,6 +74,8 @@ Testing/
 
 #visual studio
 .vs/
+*.sln
+*.slnx
 
 # Exception Files
 !protoc.exe

@@ -1,8 +1,0 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="GameServer/GameServer.vcxproj" Id="3db4c8b3-1615-4ff5-83d5-f81a5c035b5a" />
-  <Project Path="Submodule/ServerCore/ServerCore/ServerCore.vcxproj" Id="33a38137-97cd-4444-8e68-8f559b4a14d0" />
-</Solution>
