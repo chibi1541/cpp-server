@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300" role="img" aria-label="격자 단위 이동 루프 도식">
+<rect x="0.5" y="0.5" width="819" height="299" rx="10" fill="#f7f8fa" stroke="#dfe3e8"/>
+
+<text x="32" y="34" font-family="system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif" font-size="13" fill="#333a45">Move() 한 번 호출 &#8212; remainTime을 격자 경계 단위로 소모합니다</text>
+<text x="32" y="52" font-family="system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif" font-size="11" fill="#6b7480">예: 틱이 밀려 한 번의 Move()에서 격자 3칸을 지나는 경우</text>
+
+<!-- timeline -->
+<rect x="100.5" y="70.5" width="99" height="30" fill="#eef1f5" stroke="#c9d0da"/>
+<rect x="200.5" y="70.5" width="139" height="30" fill="#eef1f5" stroke="#c9d0da"/>
+<rect x="340.5" y="70.5" width="139" height="30" fill="#eef1f5" stroke="#c9d0da"/>
+<rect x="480.5" y="70.5" width="79" height="30" fill="#f0b429" stroke="#cf9316"/>
+
+<text x="150" y="89" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#333a45">① needTime</text>
+<text x="270" y="89" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#333a45">② needTime</text>
+<text x="410" y="89" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#333a45">③ needTime</text>
+<text x="520" y="89" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#333a45">④ 나머지</text>
+
+<!-- loop bracket over ①②③ -->
+<path d="M100 110 L100 116 L480 116 L480 110" fill="none" stroke="#9aa4b2" stroke-width="1"/>
+<text x="290" y="130" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#6b7480">do { ... } while (remainTime &gt; 0)</text>
+<text x="600" y="130" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#cf9316">remainTime &lt; needTime &#8594; return</text>
+
+<!-- dashed connectors -->
+<line x1="100" y1="100" x2="100" y2="168" stroke="#c9d0da" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="200" y1="100" x2="200" y2="168" stroke="#c9d0da" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="340" y1="100" x2="340" y2="168" stroke="#c9d0da" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="480" y1="100" x2="480" y2="168" stroke="#c9d0da" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="560" y1="100" x2="560" y2="168" stroke="#c9d0da" stroke-width="1" stroke-dasharray="3,3"/>
+
+<!-- grid track -->
+<rect x="60.5" y="169.5" width="139" height="56" fill="#ffffff" stroke="#d5dae1"/>
+<rect x="199.5" y="169.5" width="140" height="56" fill="#ffffff" stroke="#d5dae1"/>
+<rect x="339.5" y="169.5" width="140" height="56" fill="#ffffff" stroke="#d5dae1"/>
+<rect x="479.5" y="169.5" width="140" height="56" fill="#ffffff" stroke="#d5dae1"/>
+<rect x="619.5" y="169.5" width="140" height="56" fill="#f3f4f6" stroke="#d5dae1" stroke-dasharray="4,3"/>
+<text x="689" y="201" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif" font-style="italic" font-size="10" fill="#9aa4b2">다음 Move()에서</text>
+
+<!-- travel path -->
+<line x1="100" y1="198" x2="552" y2="198" stroke="#333a45" stroke-width="2"/>
+<polygon points="560,198 550,193 550,203" fill="#333a45"/>
+
+<!-- boundary markers (AddTrail) -->
+<circle cx="200" cy="198" r="5" fill="#f0b429" stroke="#cf9316" stroke-width="1.5"/>
+<circle cx="340" cy="198" r="5" fill="#f0b429" stroke="#cf9316" stroke-width="1.5"/>
+<circle cx="480" cy="198" r="5" fill="#f0b429" stroke="#cf9316" stroke-width="1.5"/>
+
+<!-- start / end markers -->
+<circle cx="100" cy="198" r="5" fill="#ffffff" stroke="#333a45" stroke-width="2"/>
+<text x="100" y="163" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#333a45">prevPos</text>
+
+<circle cx="560" cy="198" r="5" fill="#ffffff" stroke="#333a45" stroke-width="2" stroke-dasharray="2,2"/>
+<text x="560" y="163" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" fill="#333a45">position</text>
+
+<!-- legend -->
+<circle cx="42" cy="253" r="5" fill="#f0b429" stroke="#cf9316" stroke-width="1.5"/>
+<text x="54" y="257" font-family="system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif" font-size="12" fill="#333a45">AddTrail 실행 지점 &#8212; 격자 경계를 넘을 때마다 궤적에 기록됩니다</text>
+<circle cx="42" cy="275" r="5" fill="#ffffff" stroke="#333a45" stroke-width="2"/>
+<text x="54" y="279" font-family="system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif" font-size="12" fill="#333a45">최종 정지 위치 &#8212; remainTime 소진, 경계 도달 전에 return</text>
+</svg>
